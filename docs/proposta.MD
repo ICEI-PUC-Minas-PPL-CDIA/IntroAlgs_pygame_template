@@ -2,272 +2,152 @@
 
 Este documento deve ser preenchido pelo grupo na Semana 1 do projeto.
 
-A proposta deve apresentar uma ideia simples, clara e viável para ser desenvolvida com Python e Pygame dentro do prazo disponível.
-
 ## 1. Nome provisório do jogo
 
-Escreva aqui o nome provisório do jogo.
-
-Exemplo:
-
-> Corrida dos Obstáculos
+> Antares
 
 ## 2. Integrantes do grupo
 
 Liste os integrantes do grupo.
 
-- Nome 1:
-- Nome 2:
-- Nome 3:
-- Nome 4:
+- Nome 1:Beatriz Carvalho
+- Nome 2:Iale Leles
+- Nome 3:Igor Carvalho
+- Nome 4:Isadora Alvarenga
 
 ## 3. Tipo de jogo
 
-Indique o tipo de jogo que será desenvolvido.
+Tipo escolhido pelo grupo:
 
-Exemplos:
-
-- jogo de desviar de obstáculos;
-- jogo de coleta de itens;
-- labirinto simples;
-- jogo de perguntas e respostas;
-- jogo de memória;
-- Pong;
-- Snake;
-- Breakout;
 - nave desviando de meteoros;
 - corrida simples com obstáculos;
 - jogo de clique rápido;
-- jogo de sobrevivência simples.
-
-Tipo escolhido pelo grupo:
-
-> Escreva aqui.
 
 ## 4. Descrição geral do jogo
 
-Explique, em poucas linhas, como o jogo funcionará.
-
-Procure responder:
-
-- O que aparece na tela?
-- O que o jogador controla?
-- O que o jogador precisa fazer?
-- Quais desafios aparecem durante a partida?
-
 Descrição:
 
-> Escreva aqui.
+> Antares é um jogo de combate espacial inspirado em Space Invaders e ambientado no universo Star Wars, desenvolvido em Python com a biblioteca Pygame. O jogador assume o controle de uma nave de combate em meio a uma resistência contra uma frota inimiga, enfrentando ondas de inimigos, desviando de obstáculos, sobrevivendo a Quick Time Events em momentos críticos e enfrentando combates contra chefes. Entre as fases, o jogador precisa reparar sistemas danificados da nave por meio de um minijogo de circuitos lógicos, no qual deve combinar portas AND, OR e NOT para restabelecer a energia dos componentes — integrando uma camada educacional de lógica booleana ao gameplay.
 
 ## 5. Objetivo do jogador
 
-Explique qual é o objetivo principal do jogador.
-
-Exemplos:
-
-- coletar o maior número possível de itens;
-- sobreviver pelo maior tempo possível;
-- chegar até o final do labirinto;
-- acertar alvos;
-- responder perguntas corretamente;
-- evitar obstáculos;
-- quebrar todos os blocos.
-
 Objetivo:
 
-> Escreva aqui.
+Pilotar a nave através de fases progressivamente mais difíceis, eliminando inimigos, sobrevivendo aos obstáculos do espaço e mantendo a nave operacional ao reparar seus sistemas com base em raciocínio lógico, até derrotar a frota inimiga e seu comandante na batalha final.
 
 ## 6. Regras principais
 
 Liste as principais regras do jogo.
 
-Exemplo:
-
-- O jogador começa com 3 vidas.
-- Cada moeda coletada vale 10 pontos.
-- Cada colisão com obstáculo remove 1 vida.
-- A partida termina quando as vidas chegam a zero.
-- O jogador vence se alcançar 100 pontos.
-
 Regras do grupo:
 
-- Regra 1:
-- Regra 2:
-- Regra 3:
-- Regra 4:
-- Regra 5:
+- Regra 1: O jogador começa com 100% de vida.
+- Regra 2: Cada colisão é progressiva, onde os asteróides pequenos tiram 5% de vida, os médios 10% e os grandes 15% de vida.
+- Regra 3: Cada tiro reduz uma porcentagem da vida conforme o seu tipo. 
+- Regra 4: Se o jogador cair no buraco negro ele morre instantâneamente.
+- Regra 5: A fase termina após o jogador exterminar todas as naves presentes naquelas determinada fase.
+- Regra 6: Quando a nave do jogador ficar com a vida baixa o jogador terá a opção de resgatar no espaço uma ferramente de reparo para a nave, aumentando a vida em 20%, não tendo o direito de reparar no fim da fase. 
+- Regra 7: Se o jogador não conseguir reparar a nave, em qualquer situação, após 3 chances, ele perderá 3% de vida.
+- Regra 8: Se o jogador inutilizar a nave, ele volta para o início da fase atual.
+- Regra 9: Se o jogador cair no buraco negro, ele volta para a fase inicial.
+- Regra 10: O jogo acaba após o jogador eliminar o boss: A estrela da morte.
 
 ## 7. Condição de vitória
 
-Explique como o jogador vence ou conclui o jogo.
-
-Exemplos:
-
-- atingir determinada pontuação;
-- chegar ao final da fase;
-- sobreviver até o tempo acabar;
-- responder uma quantidade mínima de perguntas;
-- quebrar todos os blocos.
-
 Condição de vitória:
 
-> Escreva aqui.
+> O jogador passa de fase se matar todas as naves presentes naquelas determinada fase.
+> O jogador vence o jogo após eliminar a estrela da morte, na última fase.
 
 ## 8. Condição de derrota ou encerramento
 
-Explique como o jogador perde ou quando a partida termina.
-
-Exemplos:
-
-- perder todas as vidas;
-- acabar o tempo;
-- colidir com determinado obstáculo;
-- errar muitas perguntas;
-- deixar a bola cair, no caso de Breakout ou Pong.
-
 Condição de derrota ou encerramento:
 
-> Escreva aqui.
+> Quando a barra de vida da nave se esgotar.
+> Cair no buraco negro.
 
 ## 9. Elementos previstos no jogo
 
-Descreva os principais elementos que farão parte do jogo.
-
-## Jogador ou elemento principal
-
-Exemplo:
-
-> Um personagem controlado pelas setas do teclado.
-
 Descrição:
 
-> Escreva aqui.
+> Jogador, controlado pelas setas do teclado.
+> Naves inimigas.
+> Antares(bot de suporte), aparece em situações de vulnerabilidade.
+> Buraco negro, reseta o jogo.
+> Estrela da morte, boss final, inimigo mais difícil, tem munições fatais.
+> Asteróides, obstáculos simples.
 
 ## Obstáculos, inimigos ou desafios
 
-Exemplo:
-
-> Obstáculos aparecem em posições aleatórias e devem ser evitados.
-
 Descrição:
 
-> Escreva aqui.
+> buraco negro, reseta o jogo e atraí o jogador quando passa da zona segura.
+> Estrela da morte, boss final, inimigo mais difícil, tem munições fatais e aprace apenas na última fase.
+> Asteróides, obstáculos simples, aparecem em momentos e posições aleatórias no espaço, seguem sempre uma direção única.
 
 ## Itens, alvos ou objetos de interação
 
-Exemplo:
-
-> Moedas aparecem na tela e aumentam a pontuação quando coletadas.
-
 Descrição:
 
-> Escreva aqui.
+> Naves inimigas, são alvos.
+> Ferramentas de reparo aparecem no espaço quando a vida útil da nave se encontra em 35% ou menos. 
 
 ## Pontuação, vidas, tempo ou progresso
 
-Exemplo:
-
-> O jogador começa com 3 vidas e ganha 10 pontos por item coletado.
-
 Descrição:
 
-> Escreva aqui.
+> O jogador começa com a nave em 100%, e só tem a oportunidade de conserta-la com ferramentas de reparo coletadas e utilizadas com exito ou no fim de cada fase, onde não foram feito o uso dessas ferramentas. 
 
 ## 10. Controles previstos
 
-Informe os comandos que serão utilizados pelo jogador.
-
-Exemplo:
-
-- Seta para cima: mover para cima
-- Seta para baixo: mover para baixo
-- Seta para esquerda: mover para esquerda
-- Seta para direita: mover para direita
-- Espaço: realizar ação
-- ESC: sair do jogo
-
 Controles do grupo:
 
-- Tecla/comando:
-- Tecla/comando:
-- Tecla/comando:
+- Tecla/comando: Seta para cima: mover para cima
+- Tecla/comando: Seta para baixo: mover para baixo
+- Tecla/comando: Seta para esquerda: mover para esquerda
+- Tecla/comando: Seta para direita: mover para direita
+- Tecla/comando: W: mover para cima
+- Tecla/comando: S: mover para baixo
+- Tecla/comando: A: mover para esquerda
+- Tecla/comando: D: mover para direita
+- Tecla/comando: Espaço: Atirar
+- Tecla/comando: ESC: Menu de opções
+- Tecla/comando: Mouse: Realizar o reparo da nave
 
 ## 11. Organização inicial do código
 
-Explique como o grupo pretende organizar o código.
-
-Exemplo:
-
-- `main.py`: inicia o jogo;
-- `src/jogo.py`: contém o loop principal;
-- `src/config.py`: guarda configurações como tamanho da tela e cores;
-- `src/funcoes.py`: contém funções auxiliares;
-- `src/dados.py`: contém funções de leitura e escrita de arquivos.
-
 Organização planejada:
 
-> Escreva aqui.
-
+> `main.py`: inicia o jogo;
+> `src/jogo.py`: contém o loop principal;
+> `src/config.py`: guarda configurações como tamanho da tela e cores;
+> `src/funcoes.py`: contém funções auxiliares;
+> `src/dados.py`: contém funções de leitura e escrita de arquivos.
 
 ## 12. Recursos externos previstos
 
-Informe se o grupo pretende utilizar imagens, sons, fontes, tutoriais ou códigos externos.
-
-Exemplo:
-
-- imagens obtidas de banco gratuito;
-- sons gratuitos;
-- tutorial usado apenas como referência;
-- fonte personalizada.
-
 Recursos previstos:
 
-> Escreva aqui.
-
-Caso não pretenda utilizar recursos externos, escreva:
-
-> Não pretendemos utilizar recursos externos.
+> Imagens obtidas de meios gratuitos;
+> Sons gratuitos;
+> Documentação pygame;
 
 ## 13. Principais dificuldades esperadas
 
-Liste as dificuldades que o grupo acredita que poderá enfrentar.
-
-Exemplos:
-
-- movimentação do jogador;
-- colisão entre objetos;
-- controle de tempo;
-- criação do ranking;
-- organização do código;
-- uso do GitHub;
-- testes;
-- exibição de textos na tela.
-
 Dificuldades previstas:
 
-- Dificuldade 1:
-- Dificuldade 2:
-- Dificuldade 3:
+- Dificuldade 1: Obtenção das mídias;
+- Dificuldade 2: Controle de tempo;
+- Dificuldade 3: Projetar mecânicas específicas, como a do buraco negro;
+- Dificuldade 4: Testes;
 
 ## 14. Escopo mínimo para a entrega final
 
-Descreva qual será a versão mínima aceitável do jogo.
-
-Esta seção é importante para evitar que o grupo escolha uma ideia grande demais.
-
-Exemplo:
-
-> A versão mínima do jogo terá um personagem controlado pelo teclado, obstáculos aparecendo na tela, sistema de vidas, sistema de pontuação e tela de fim de jogo.
-
 Escopo mínimo:
 
-> Escreva aqui.
+> A versão mínima do jogo terá um personagem controlado pelo teclado, obstáculos aparecendo na tela, amostra de vida útil da nave, tela de fim de jogo.
 
 ## 15. Possíveis melhorias, caso haja tempo
-
-Liste funcionalidades extras que o grupo poderá implementar se conseguir concluir o escopo mínimo.
-
-Exemplos:
 
 - tela inicial;
 - sons;
@@ -276,11 +156,13 @@ Exemplos:
 - ranking;
 - animações;
 - novos tipos de obstáculos;
-- diferentes personagens;
-- menu de pausa.
+- menu de pausa;
+- fases;
+- buraco negro;
+- boss na fase final;
 
 Melhorias possíveis:
 
-- Melhoria 1:
-- Melhoria 2:
-- Melhoria 3:
+- Melhoria 1: Novas naves;
+- Melhoria 2: Salvar o progresso;
+- Melhoria 3: Mais opções no menu de pausa.
