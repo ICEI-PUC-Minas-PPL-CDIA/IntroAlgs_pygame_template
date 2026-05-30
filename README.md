@@ -1,4 +1,4 @@
-# Nome do Jogo
+AstroRun
 
 Projeto final da disciplina de Introdução a Algoritmos/Programação, desenvolvido com Python e Pygame.
 
@@ -6,10 +6,8 @@ Este repositório é um template para os grupos da disciplina. A proposta é com
 
 ## Integrantes do grupo
 
-- Nome do integrante 1
-- Nome do integrante 2
-- Nome do integrante 3
-- Nome do integrante 4
+- Kennedy Pereira Mendes
+- Maria Eduarda Barreto da Silva
 
 ## Estrutura do projeto
 
@@ -22,43 +20,30 @@ Este repositório é um template para os grupos da disciplina. A proposta é com
 
 ## Descrição do jogo
 
-Descreva brevemente a ideia principal do jogo.
+O jogo consiste em uma nave espacial que se desloca em um cenário horizontal. Durante a partida, meteoritos surgem continuamente do lado direito da tela e se movem em direção ao lado esquerdo, criando obstáculos que o jogador deve evitar. A nave pode ser controlada pelo jogador para realizar os desvios necessários, tornando a jogabilidade dinâmica e progressivamente desafiadora.
 
-Exemplo:
-
-> O jogo consiste em controlar um personagem que deve coletar moedas e evitar obstáculos. O jogador ganha pontos ao coletar itens e perde vidas ao colidir com obstáculos. A partida termina quando o tempo acaba ou quando o jogador perde todas as vidas.
 
 ## Objetivo do jogador
 
-Explique o que o jogador precisa fazer para vencer ou avançar no jogo.
-
-Exemplo:
-
-> O objetivo é coletar a maior quantidade possível de itens antes que o tempo acabe, evitando colisões com os obstáculos.
+O objetivo do jogador é permanecer em jogo pelo maior tempo possível sem colidir com os meteoritos. A pontuação é calculada com base no tempo de sobrevivência, de modo que quanto mais tempo a nave permanecer intacta, maior será a pontuação obtida. Quando ocorre uma colisão, a partida é encerrada e a pontuação final é comparada ao recorde armazenado. Caso a nova pontuação seja superior à anterior, ela passa a ser registrada como o novo recorde, incentivando o jogador a superar sua própria marca em partidas futuras.
 
 ## Regras do jogo
 
-Liste as principais regras do jogo.
-
-Exemplo:
-
-- O jogador se movimenta usando as setas do teclado.
-- Cada item coletado aumenta a pontuação.
-- Colidir com um obstáculo reduz a quantidade de vidas.
-- A partida termina quando o jogador perde todas as vidas ou quando o tempo acaba.
+* O jogador controla uma nave espacial utilizando o teclado.
+* A nave pode se mover apenas para cima e para baixo.
+* Meteoros aparecem no lado direito da tela e se movem em direção ao lado esquerdo.
+* O objetivo do jogo é sobreviver o maior tempo possível desviando dos meteoros.
+* Quanto maior o tempo de sobrevivência, maior será a pontuação.
+* O jogo registra automaticamente o maior recorde alcançado pelo jogador.
+* Conforme o tempo passa, a velocidade e a quantidade de meteoros aumentam.
+* O jogo termina quando a nave colide com um meteoro.
 
 ## Controles
 
-Informe as teclas ou comandos utilizados no jogo.
-
-Exemplo:
-
-- Seta para cima: mover para cima
-- Seta para baixo: mover para baixo
-- Seta para esquerda: mover para esquerda
-- Seta para direita: mover para direita
-- Espaço: realizar ação
-- ESC: sair do jogo
+* Seta para cima: mover a nave para cima
+* Seta para baixo: mover a nave para baixo
+* ENTER: iniciar ou reiniciar o jogo
+* ESC: sair do jogo
 
 ## Como executar o projeto
 
