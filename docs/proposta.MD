@@ -111,6 +111,3 @@ Melhoria 1: Tela inicial.
 Melhoria 2: Power-ups de escudo ou velocidade.
 
 Melhoria 3: Ranking de melhores pontuações.
-- Melhoria 1:
-- Melhoria 2:
-- Melhoria 3:
