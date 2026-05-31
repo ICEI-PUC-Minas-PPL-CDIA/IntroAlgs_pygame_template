@@ -1,90 +1,120 @@
-# Nome do Jogo
+# SpaceNinja
 
 Projeto final da disciplina de Introdução a Algoritmos/Programação, desenvolvido com Python e Pygame.
 
-Este repositório é um template para os grupos da disciplina. A proposta é começar com uma base funcional e evoluir o jogo ao longo do semestre.
+O jogo consiste em controlar uma nave espacial que deve sobreviver o maior tempo possível desviando de meteoros que surgem aleatoriamente na tela.
 
-## Integrantes do grupo
+## Integrantes do Grupo
 
-- Henrique Santos de Souza
-- Guilherme Henrique 
-- Bruno Coutinho
+* Henrique Santos de Souza
+* Guilherme Henrique
+* Bruno Coutinho
 
-## Estrutura do projeto
+## Estrutura do Projeto
 
-- `main.py`: ponto de entrada da aplicação.
-- `src/`: código-fonte principal do jogo (loop, regras, sprites e dados).
-- `assets/`: imagens, fontes e sons.
-- `data/`: arquivos persistentes (recorde/ranking).
-- `tests/`: testes unitários com `pytest`.
-- `docs/`: documentação do projeto, incluindo proposta inicial.
+```text
+Meteor-Escape/
+├── main.py
+├── requirements.txt
+├── README.md
+├── assets/
+│   ├── images/
+│   ├── sounds/
+│   └── fonts/
+├── data/
+│   └── ranking.json
+├── docs/
+│   ├── proposta.md
+│   └── relatorio.md
+├── src/
+│   ├── game.py
+│   ├── player.py
+│   ├── meteor.py
+│   └── config.py
+└── tests/
+```
 
-## Descrição do jogo
+## Descrição do Jogo
 
-Descreva brevemente a ideia principal do jogo.
+O jogador controla uma nave espacial em um cenário espacial. Meteoros surgem aleatoriamente na parte superior da tela e se movem em direção à parte inferior.
 
-Exemplo:
+O objetivo é sobreviver o maior tempo possível desviando dos meteoros. Conforme a partida avança, a dificuldade aumenta devido ao surgimento mais frequente de obstáculos.
 
-> O jogo consiste em controlar um personagem que deve coletar moedas e evitar obstáculos. O jogador ganha pontos ao coletar itens e perde vidas ao colidir com obstáculos. A partida termina quando o tempo acaba ou quando o jogador perde todas as vidas.
+## Objetivo do Jogador
 
-## Objetivo do jogador
+Sobreviver o maior tempo possível e obter a maior pontuação possível evitando colisões com os meteoros.
 
-Explique o que o jogador precisa fazer para vencer ou avançar no jogo.
+## Regras do Jogo
 
-Exemplo:
-
-> O objetivo é coletar a maior quantidade possível de itens antes que o tempo acabe, evitando colisões com os obstáculos.
-
-## Regras do jogo
-
-Liste as principais regras do jogo.
-
-Exemplo:
-
-- O jogador se movimenta usando as setas do teclado.
-- Cada item coletado aumenta a pontuação.
-- Colidir com um obstáculo reduz a quantidade de vidas.
-- A partida termina quando o jogador perde todas as vidas ou quando o tempo acaba.
+* O jogador controla uma nave espacial.
+* A nave pode se mover livremente dentro dos limites da tela.
+* Meteoros surgem continuamente em posições aleatórias.
+* Cada colisão com um meteoro remove uma vida.
+* O jogador inicia a partida com 3 vidas.
+* A pontuação aumenta conforme o tempo de sobrevivência.
+* O jogo termina quando todas as vidas forem perdidas.
 
 ## Controles
 
-Informe as teclas ou comandos utilizados no jogo.
+* ↑ : mover para cima
+* ↓ : mover para baixo
+* ← : mover para a esquerda
+* → : mover para a direita
+* ESC : sair do jogo
 
-Exemplo:
-
-- Seta para cima: mover para cima
-- Seta para baixo: mover para baixo
-- Seta para esquerda: mover para esquerda
-- Seta para direita: mover para direita
-- Espaço: realizar ação
-- ESC: sair do jogo
-
-## Como executar o projeto
+## Como Executar o Projeto
 
 ### 1. Clonar o repositório
 
 ```bash
 git clone LINK_DO_REPOSITORIO
 cd NOME_DA_PASTA
+```
+
+### 2. Instalar as dependências
+
+```bash
 pip install -r requirements.txt
+```
+
+### 3. Executar o jogo
+
+```bash
 python main.py
 ```
 
-## Como executar os testes
+## Como Executar os Testes
 
 ```bash
 python -m pytest
 ```
 
-## Checklist mínimo para entrega
+## Checklist Mínimo para Entrega
 
-- Preencher este README com nome final, descrição real, regras e controles do jogo.
-- Atualizar `docs/proposta.MD` com a proposta do grupo.
-- Garantir que o jogo executa com `python main.py`.
-- Garantir que os testes passam com `pytest`.
+* [ ] Nave controlada pelo teclado.
+* [ ] Movimentação em quatro direções.
+* [ ] Sistema de geração de meteoros.
+* [ ] Sistema de colisão.
+* [ ] Sistema de vidas.
+* [ ] Sistema de pontuação.
+* [ ] Tela de fim de jogo.
+* [ ] Execução através de `python main.py`.
+* [ ] Testes funcionando com `pytest`.
 
-## Observações para os alunos
+## Possíveis Melhorias
 
-- Mantenham o código organizado em módulos pequenos e com responsabilidade clara.
-- Comentem partes importantes da lógica, principalmente regras do jogo.
-- Registrem decisões técnicas no README do grupo ao longo do desenvolvimento.
+* Tela inicial.
+* Sistema de ranking.
+* Power-ups de escudo.
+* Power-ups de velocidade.
+* Diferentes tipos de meteoros.
+* Sons e efeitos visuais.
+* Menu de pausa.
+* Aumento progressivo da dificuldade.
+
+## Observações
+
+* Manter o código organizado em módulos pequenos e com responsabilidades bem definidas.
+* Utilizar GitHub para controle de versão.
+* Documentar alterações importantes durante o desenvolvimento.
+* Priorizar a conclusão do escopo mínimo antes de implementar funcionalidades extras.
