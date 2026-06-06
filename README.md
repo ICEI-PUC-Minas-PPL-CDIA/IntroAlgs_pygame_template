@@ -1,91 +1,168 @@
-# Nome do Jogo
+# Proposta Inicial do Jogo
 
-Projeto final da disciplina de Introdução a Algoritmos/Programação, desenvolvido com Python e Pygame.
+Este documento deve ser preenchido pelo grupo na Semana 1 do projeto.
 
-Este repositório é um template para os grupos da disciplina. A proposta é começar com uma base funcional e evoluir o jogo ao longo do semestre.
+## 1. Nome provisório do jogo
 
-## Integrantes do grupo
+> Antares
 
-- Nome do integrante 1
-- Nome do integrante 2
-- Nome do integrante 3
-- Nome do integrante 4
+## 2. Integrantes do grupo
 
-## Estrutura do projeto
+Liste os integrantes do grupo.
 
-- `main.py`: ponto de entrada da aplicação.
-- `src/`: código-fonte principal do jogo (loop, regras, sprites e dados).
-- `assets/`: imagens, fontes e sons.
-- `data/`: arquivos persistentes (recorde/ranking).
-- `tests/`: testes unitários com `pytest`.
-- `docs/`: documentação do projeto, incluindo proposta inicial.
+- Nome 1:Beatriz Carvalho
+- Nome 2:Iale Leles
+- Nome 3:Igor Carvalho
+- Nome 4:Isadora Alvarenga
 
-## Descrição do jogo
+## 3. Tipo de jogo
 
-Descreva brevemente a ideia principal do jogo.
+Tipo escolhido pelo grupo:
 
-Exemplo:
+- nave desviando de meteoros;
+- corrida simples com obstáculos;
+- jogo de clique rápido;
 
-> O jogo consiste em controlar um personagem que deve coletar moedas e evitar obstáculos. O jogador ganha pontos ao coletar itens e perde vidas ao colidir com obstáculos. A partida termina quando o tempo acaba ou quando o jogador perde todas as vidas.
+## 4. Descrição geral do jogo
 
-## Objetivo do jogador
+Descrição:
 
-Explique o que o jogador precisa fazer para vencer ou avançar no jogo.
+> Antares é um jogo de combate espacial inspirado em Space Invaders e ambientado no universo Star Wars, desenvolvido em Python com a biblioteca Pygame. O jogador assume o controle de uma nave de combate em meio a uma resistência contra uma frota inimiga, enfrentando ondas de inimigos, desviando de obstáculos, sobrevivendo a Quick Time Events em momentos críticos e enfrentando combates contra chefes. Entre as fases, o jogador precisa reparar sistemas danificados da nave por meio de um minijogo de circuitos lógicos, no qual deve combinar portas AND, OR e NOT para restabelecer a energia dos componentes — integrando uma camada educacional de lógica booleana ao gameplay.
 
-Exemplo:
+## 5. Objetivo do jogador
 
-> O objetivo é coletar a maior quantidade possível de itens antes que o tempo acabe, evitando colisões com os obstáculos.
+Objetivo:
 
-## Regras do jogo
+Pilotar a nave através de fases progressivamente mais difíceis, eliminando inimigos, sobrevivendo aos obstáculos do espaço e mantendo a nave operacional ao reparar seus sistemas com base em raciocínio lógico, até derrotar a frota inimiga e seu comandante na batalha final.
+
+## 6. Regras principais
 
 Liste as principais regras do jogo.
 
-Exemplo:
+Regras do grupo:
 
-- O jogador se movimenta usando as setas do teclado.
-- Cada item coletado aumenta a pontuação.
-- Colidir com um obstáculo reduz a quantidade de vidas.
-- A partida termina quando o jogador perde todas as vidas ou quando o tempo acaba.
+- Regra 1: O jogador começa com 100% de vida.
+- Regra 2: Cada colisão é progressiva, onde os asteróides pequenos tiram 5% de vida, os médios 10% e os grandes 15% de vida.
+- Regra 3: Cada tiro reduz uma porcentagem da vida conforme o seu tipo. 
+- Regra 4: Se o jogador cair no buraco negro ele morre instantâneamente.
+- Regra 5: A fase termina após o jogador exterminar todas as naves presentes naquelas determinada fase.
+- Regra 6: Quando a nave do jogador ficar com a vida baixa o jogador terá a opção de resgatar no espaço uma ferramente de reparo para a nave, aumentando a vida em 20%, não tendo o direito de reparar no fim da fase. 
+- Regra 7: Se o jogador não conseguir reparar a nave, em qualquer situação, após 3 chances, ele perderá 3% de vida.
+- Regra 8: Se o jogador inutilizar a nave, ele volta para o início da fase atual.
+- Regra 9: Se o jogador cair no buraco negro, ele volta para a fase inicial.
+- Regra 10: O jogo acaba após o jogador eliminar o boss: A estrela da morte.
 
-## Controles
+## 7. Condição de vitória
 
-Informe as teclas ou comandos utilizados no jogo.
+Condição de vitória:
 
-Exemplo:
+> O jogador passa de fase se matar todas as naves presentes naquelas determinada fase.
+> O jogador vence o jogo após eliminar a estrela da morte, na última fase.
 
-- Seta para cima: mover para cima
-- Seta para baixo: mover para baixo
-- Seta para esquerda: mover para esquerda
-- Seta para direita: mover para direita
-- Espaço: realizar ação
-- ESC: sair do jogo
+## 8. Condição de derrota ou encerramento
 
-## Como executar o projeto
+Condição de derrota ou encerramento:
 
-### 1. Clonar o repositório
+> Quando a barra de vida da nave se esgotar.
+> Cair no buraco negro.
 
-```bash
-git clone LINK_DO_REPOSITORIO
-cd NOME_DA_PASTA
-pip install -r requirements.txt
-python main.py
-```
+## 9. Elementos previstos no jogo
 
-## Como executar os testes
+Descrição:
 
-```bash
-python -m pytest
-```
+> Jogador, controlado pelas setas do teclado.
+> Naves inimigas.
+> Antares(bot de suporte), aparece em situações de vulnerabilidade.
+> Buraco negro, reseta o jogo.
+> Estrela da morte, boss final, inimigo mais difícil, tem munições fatais.
+> Asteróides, obstáculos simples.
 
-## Checklist mínimo para entrega
+## Obstáculos, inimigos ou desafios
 
-- Preencher este README com nome final, descrição real, regras e controles do jogo.
-- Atualizar `docs/proposta.MD` com a proposta do grupo.
-- Garantir que o jogo executa com `python main.py`.
-- Garantir que os testes passam com `pytest`.
+Descrição:
 
-## Observações para os alunos
+> buraco negro, reseta o jogo e atraí o jogador quando passa da zona segura.
+> Estrela da morte, boss final, inimigo mais difícil, tem munições fatais e aprace apenas na última fase.
+> Asteróides, obstáculos simples, aparecem em momentos e posições aleatórias no espaço, seguem sempre uma direção única.
 
-- Mantenham o código organizado em módulos pequenos e com responsabilidade clara.
-- Comentem partes importantes da lógica, principalmente regras do jogo.
-- Registrem decisões técnicas no README do grupo ao longo do desenvolvimento.
+## Itens, alvos ou objetos de interação
+
+Descrição:
+
+> Naves inimigas, são alvos.
+> Ferramentas de reparo aparecem no espaço quando a vida útil da nave se encontra em 35% ou menos. 
+
+## Pontuação, vidas, tempo ou progresso
+
+Descrição:
+
+> O jogador começa com a nave em 100%, e só tem a oportunidade de conserta-la com ferramentas de reparo coletadas e utilizadas com exito ou no fim de cada fase, onde não foram feito o uso dessas ferramentas. 
+
+## 10. Controles previstos
+
+Controles do grupo:
+
+- Tecla/comando: Seta para cima: mover para cima
+- Tecla/comando: Seta para baixo: mover para baixo
+- Tecla/comando: Seta para esquerda: mover para esquerda
+- Tecla/comando: Seta para direita: mover para direita
+- Tecla/comando: W: mover para cima
+- Tecla/comando: S: mover para baixo
+- Tecla/comando: A: mover para esquerda
+- Tecla/comando: D: mover para direita
+- Tecla/comando: Espaço: Atirar
+- Tecla/comando: ESC: Menu de opções
+- Tecla/comando: Mouse: Realizar o reparo da nave
+
+## 11. Organização inicial do código
+
+Organização planejada:
+
+> `main.py`: inicia o jogo;
+> `src/jogo.py`: contém o loop principal;
+> `src/config.py`: guarda configurações como tamanho da tela e cores;
+> `src/funcoes.py`: contém funções auxiliares;
+> `src/dados.py`: contém funções de leitura e escrita de arquivos.
+
+## 12. Recursos externos previstos
+
+Recursos previstos:
+
+> Imagens obtidas de meios gratuitos;
+> Sons gratuitos;
+> Documentação pygame;
+
+## 13. Principais dificuldades esperadas
+
+Dificuldades previstas:
+
+- Dificuldade 1: Obtenção das mídias;
+- Dificuldade 2: Controle de tempo;
+- Dificuldade 3: Projetar mecânicas específicas, como a do buraco negro;
+- Dificuldade 4: Testes;
+
+## 14. Escopo mínimo para a entrega final
+
+Escopo mínimo:
+
+> A versão mínima do jogo terá um personagem controlado pelo teclado, obstáculos aparecendo na tela, amostra de vida útil da nave, tela de fim de jogo.
+
+## 15. Possíveis melhorias, caso haja tempo
+
+- tela inicial;
+- sons;
+- fases;
+- aumento de dificuldade;
+- ranking;
+- animações;
+- novos tipos de obstáculos;
+- menu de pausa;
+- fases;
+- buraco negro;
+- boss na fase final;
+
+Melhorias possíveis:
+
+- Melhoria 1: Novas naves;
+- Melhoria 2: Salvar o progresso;
+- Melhoria 3: Mais opções no menu de pausa.
