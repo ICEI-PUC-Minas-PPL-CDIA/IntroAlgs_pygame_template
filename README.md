@@ -91,15 +91,15 @@ python -m pytest
 
 ## Checklist Mínimo para Entrega
 
-* [ ] Nave controlada pelo teclado.
-* [ ] Movimentação em quatro direções.
-* [ ] Sistema de geração de meteoros.
-* [ ] Sistema de colisão.
-* [ ] Sistema de vidas.
-* [ ] Sistema de pontuação.
-* [ ] Tela de fim de jogo.
-* [ ] Execução através de `python main.py`.
-* [ ] Testes funcionando com `pytest`.
+* [x] Nave controlada pelo teclado.
+* [x] Movimentação em quatro direções.
+* [x] Sistema de geração de meteoros.
+* [x] Sistema de colisão.
+* [x] Sistema de vidas.
+* [x] Sistema de pontuação.
+* [x] Tela de fim de jogo.
+* [x] Execução através de `python main.py`.
+* [x] Testes funcionando com `pytest`.
 
 ## Possíveis Melhorias
 
