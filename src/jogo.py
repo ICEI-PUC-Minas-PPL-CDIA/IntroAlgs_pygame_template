@@ -4,22 +4,28 @@ from src.config import (
     AZUL_ESCURO, BRANCO, VERMELHO, AMARELO,
     VELOCIDADE_JOGADOR, VIDAS_INICIAIS,
     INTERVALO_METEORO_INICIAL, INTERVALO_METEORO_MINIMO, REDUCAO_INTERVALO,
-    CAMINHO_RECORDE, CAMINHO_SPRITES,
+    CAMINHO_RECORDE, CAMINHO_NAVE, CAMINHO_METEORO, CAMINHO_FUNDO,
 )
 from src.funcoes import limitar_valor, verificar_colisao, tomar_dano, jogador_perdeu
 from src.meteoro import criar_meteoro, mover_meteoros, desenhar_meteoros
-from src.sprites import pegar_sprite
 from src.dados import salvar_recorde, carregar_recorde
+
+TAMANHO_NAVE = (60, 52)
+TAMANHO_METEORO_BASE = 45  # tamanho máximo; meteoros variam de 20 a 45
 
 
 def _carregar_imagens():
-    """Tenta carregar sprites da spritesheet; retorna None se falhar."""
+    """Tenta carregar imagens separadas; retorna None se falhar."""
     try:
-        nave = pegar_sprite(CAMINHO_SPRITES, x=110, y=120, width=190, height=190, scale=0.5)
-        meteoro = pegar_sprite(CAMINHO_SPRITES, x=905, y=1060, width=200, height=130, scale=0.4)
-        return nave, meteoro
+        nave = pygame.image.load(CAMINHO_NAVE).convert_alpha()
+        nave = pygame.transform.scale(nave, TAMANHO_NAVE)
+        meteoro = pygame.image.load(CAMINHO_METEORO).convert_alpha()
+        meteoro = pygame.transform.scale(meteoro, (TAMANHO_METEORO_BASE, TAMANHO_METEORO_BASE))
+        fundo = pygame.image.load(CAMINHO_FUNDO).convert()
+        fundo = pygame.transform.scale(fundo, (LARGURA_TELA, ALTURA_TELA))
+        return nave, meteoro, fundo
     except Exception:
-        return None, None
+        return None, None, None
 
 
 def _desenhar_hud(tela, fonte, pontos, vidas, recorde):
@@ -53,8 +59,7 @@ def _desenhar_jogador(tela, jogador, imagem_nave):
 
 
 def _novo_jogo(imagem_nave):
-    w = imagem_nave.get_width() if imagem_nave else 40
-    h = imagem_nave.get_height() if imagem_nave else 40
+    w, h = TAMANHO_NAVE if imagem_nave else (40, 40)
     rect = pygame.Rect(LARGURA_TELA // 2 - w // 2, ALTURA_TELA - h - 20, w, h)
     return {"rect": rect, "vidas": VIDAS_INICIAIS, "pontos": 0, "invencivel_ate": 0}
 
@@ -68,7 +73,7 @@ def executar_jogo():
     fonte = pygame.font.SysFont(None, 30)
     fonte_grande = pygame.font.SysFont(None, 72)
 
-    imagem_nave, imagem_meteoro = _carregar_imagens()
+    imagem_nave, imagem_meteoro, imagem_fundo = _carregar_imagens()
     recorde = carregar_recorde(CAMINHO_RECORDE)
 
     jogando = True
@@ -134,7 +139,12 @@ def executar_jogo():
                 recorde = jogador["pontos"]
                 salvar_recorde(CAMINHO_RECORDE, recorde)
 
-            tela.fill(AZUL_ESCURO)
+            # Renderização
+            if imagem_fundo:
+                tela.blit(imagem_fundo, (0, 0))
+            else:
+                tela.fill(AZUL_ESCURO)
+
             desenhar_meteoros(tela, meteoros, imagem_meteoro)
             _desenhar_jogador(tela, jogador, imagem_nave)
             _desenhar_hud(tela, fonte, jogador["pontos"], jogador["vidas"], recorde)

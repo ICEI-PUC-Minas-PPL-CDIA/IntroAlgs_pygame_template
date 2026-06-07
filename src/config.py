@@ -27,4 +27,6 @@ REDUCAO_INTERVALO = 50            # reduz a cada 5 s de jogo
 PONTOS_POR_SEGUNDO = 1
 
 CAMINHO_RECORDE = "data/recorde.txt"
-CAMINHO_SPRITES = "assets/imagens/spritesheet.bmp"
+CAMINHO_NAVE = "assets/imagens/nave.png"
+CAMINHO_METEORO = "assets/imagens/meteoro.png"
+CAMINHO_FUNDO = "assets/imagens/fundo.png"
