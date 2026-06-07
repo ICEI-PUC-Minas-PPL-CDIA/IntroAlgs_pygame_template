@@ -1,4 +1,5 @@
-from src.funcoes import calcular_pontos, jogador_perdeu, limitar_valor
+from src.funcoes import calcular_pontos, jogador_perdeu, limitar_valor, tomar_dano, verificar_colisao
+import pygame
 
 
 def test_calcular_pontos():
@@ -29,3 +30,24 @@ def test_limitar_valor_acima_do_maximo():
 def test_limitar_valor_dentro_do_intervalo():
     """Deve manter o valor original quando ele ja estiver no intervalo."""
     assert limitar_valor(50, 0, 100) == 50
+
+
+def test_tomar_dano():
+    """Deve subtrair o dano das vidas corretamente."""
+    assert tomar_dano(3, 1) == 2
+
+
+def test_verificar_colisao_sobrepostos():
+    """Dois rects sobrepostos devem colidir."""
+    pygame.init()
+    r1 = pygame.Rect(0, 0, 50, 50)
+    r2 = pygame.Rect(25, 25, 50, 50)
+    assert verificar_colisao(r1, r2) is True
+
+
+def test_verificar_colisao_separados():
+    """Dois rects separados nao devem colidir."""
+    pygame.init()
+    r1 = pygame.Rect(0, 0, 50, 50)
+    r2 = pygame.Rect(200, 200, 50, 50)
+    assert verificar_colisao(r1, r2) is False
