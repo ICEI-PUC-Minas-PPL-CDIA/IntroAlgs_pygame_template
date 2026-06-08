@@ -77,6 +77,37 @@ def _tela_login(tela, fonte_grande, fonte):
                     nome += evento.unicode
 
 
+def _menu_pausa(tela, fonte_grande, fonte):
+    opcoes = ["Voltar ao Jogo", "Fechar Jogo"]
+    selecionado = 0
+
+    while True:
+        tela.fill((0, 0, 0))
+        titulo = fonte_grande.render("PAUSADO", True, AMARELO)
+        tela.blit(titulo, (LARGURA_TELA // 2 - titulo.get_width() // 2, ALTURA_TELA // 2 - 120))
+
+        for i, opcao in enumerate(opcoes):
+            cor = BRANCO if i == selecionado else (100, 100, 100)
+            txt = fonte.render(opcao, True, cor)
+            tela.blit(txt, (LARGURA_TELA // 2 - txt.get_width() // 2, ALTURA_TELA // 2 - 20 + i * 50))
+
+        pygame.display.flip()
+
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_UP:
+                    selecionado = (selecionado - 1) % len(opcoes)
+                elif evento.key == pygame.K_DOWN:
+                    selecionado = (selecionado + 1) % len(opcoes)
+                elif evento.key == pygame.K_RETURN:
+                    return selecionado  # 0 = voltar, 1 = fechar
+                elif evento.key == pygame.K_ESCAPE:
+                    return 0  # ESC na pausa volta ao jogo
+
+
 def _desenhar_hud(tela, fonte, pontos, vidas, recorde):
     tela.blit(fonte.render(f"Pontos: {pontos}", True, BRANCO), (10, 10))
     tela.blit(fonte.render(f"Vidas: {vidas}", True, AMARELO), (10, 40))
@@ -147,8 +178,10 @@ def executar_jogo():
                     pygame.quit()
                     return
                 if evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    return
+                    resultado = _menu_pausa(tela, fonte_grande, fonte)
+                    if resultado == 1:
+                        pygame.quit()
+                        return
 
             teclas = pygame.key.get_pressed()
             if teclas[pygame.K_LEFT]:
