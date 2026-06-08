@@ -8,7 +8,7 @@ from src.config import (
 )
 from src.funcoes import limitar_valor, verificar_colisao, tomar_dano, jogador_perdeu
 from src.meteoro import criar_meteoro, mover_meteoros, desenhar_meteoros
-from src.dados import obter_recorde_jogador, atualizar_ranking
+from src.dados import obter_recorde_jogador, atualizar_ranking, top10, melhor_pontuacao_global
 
 TAMANHO_NAVE = (60, 52)
 TAMANHO_METEORO_BASE = 45
@@ -77,19 +77,48 @@ def _tela_login(tela, fonte_grande, fonte):
                     nome += evento.unicode
 
 
+def _tela_ranking(tela, fonte_grande, fonte):
+    while True:
+        tela.fill((0, 0, 0))
+        titulo = fonte_grande.render("TOP 10", True, AMARELO)
+        tela.blit(titulo, (LARGURA_TELA // 2 - titulo.get_width() // 2, 40))
+
+        lista = top10()
+        if lista:
+            for i, (nome, pontos) in enumerate(lista):
+                cor = AMARELO if i == 0 else BRANCO
+                linha = fonte.render(f"{i + 1}. {nome} — {pontos} pts", True, cor)
+                tela.blit(linha, (LARGURA_TELA // 2 - linha.get_width() // 2, 140 + i * 35))
+        else:
+            vazio = fonte.render("Nenhuma pontuação registrada ainda.", True, (180, 180, 180))
+            tela.blit(vazio, (LARGURA_TELA // 2 - vazio.get_width() // 2, ALTURA_TELA // 2))
+
+        dica = fonte.render("ENTER ou ESC para voltar", True, (180, 180, 180))
+        tela.blit(dica, (LARGURA_TELA // 2 - dica.get_width() // 2, ALTURA_TELA - 40))
+        pygame.display.flip()
+
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if evento.type == pygame.KEYDOWN:
+                if evento.key in (pygame.K_ESCAPE, pygame.K_RETURN):
+                    return
+
+
 def _menu_pausa(tela, fonte_grande, fonte):
-    opcoes = ["Voltar ao Jogo", "Fechar Jogo"]
+    opcoes = ["Voltar ao Jogo", "Ver Ranking", "Fechar Jogo"]
     selecionado = 0
 
     while True:
         tela.fill((0, 0, 0))
         titulo = fonte_grande.render("PAUSADO", True, AMARELO)
-        tela.blit(titulo, (LARGURA_TELA // 2 - titulo.get_width() // 2, ALTURA_TELA // 2 - 120))
+        tela.blit(titulo, (LARGURA_TELA // 2 - titulo.get_width() // 2, ALTURA_TELA // 2 - 140))
 
         for i, opcao in enumerate(opcoes):
             cor = BRANCO if i == selecionado else (100, 100, 100)
             txt = fonte.render(opcao, True, cor)
-            tela.blit(txt, (LARGURA_TELA // 2 - txt.get_width() // 2, ALTURA_TELA // 2 - 20 + i * 50))
+            tela.blit(txt, (LARGURA_TELA // 2 - txt.get_width() // 2, ALTURA_TELA // 2 - 30 + i * 50))
 
         pygame.display.flip()
 
@@ -103,16 +132,21 @@ def _menu_pausa(tela, fonte_grande, fonte):
                 elif evento.key == pygame.K_DOWN:
                     selecionado = (selecionado + 1) % len(opcoes)
                 elif evento.key == pygame.K_RETURN:
-                    return selecionado  # 0 = voltar, 1 = fechar
+                    if selecionado == 1:
+                        _tela_ranking(tela, fonte_grande, fonte)
+                    else:
+                        return selecionado  # 0 = voltar, 2 = fechar
                 elif evento.key == pygame.K_ESCAPE:
                     return 0  # ESC na pausa volta ao jogo
 
 
-def _desenhar_hud(tela, fonte, pontos, vidas, recorde):
+def _desenhar_hud(tela, fonte, pontos, vidas, recorde, global_score):
     tela.blit(fonte.render(f"Pontos: {pontos}", True, BRANCO), (10, 10))
     tela.blit(fonte.render(f"Vidas: {vidas}", True, AMARELO), (10, 40))
-    txt = fonte.render(f"Recorde: {recorde}", True, AMARELO)
-    tela.blit(txt, (LARGURA_TELA - txt.get_width() - 10, 10))
+    txt_recorde = fonte.render(f"Recorde: {recorde}", True, AMARELO)
+    txt_global = fonte.render(f"Global: {global_score}", True, (180, 180, 255))
+    tela.blit(txt_recorde, (LARGURA_TELA - txt_recorde.get_width() - 10, 10))
+    tela.blit(txt_global, (LARGURA_TELA - txt_global.get_width() - 10, 40))
 
 
 def _tela_game_over(tela, fonte_grande, fonte, pontos, recorde):
@@ -179,7 +213,7 @@ def executar_jogo():
                     return
                 if evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
                     resultado = _menu_pausa(tela, fonte_grande, fonte)
-                    if resultado == 1:
+                    if resultado == 2:
                         pygame.quit()
                         return
 
@@ -231,7 +265,7 @@ def executar_jogo():
 
             desenhar_meteoros(tela, meteoros, imagem_meteoro)
             _desenhar_jogador(tela, jogador, imagem_nave)
-            _desenhar_hud(tela, fonte, jogador["pontos"], jogador["vidas"], recorde)
+            _desenhar_hud(tela, fonte, jogador["pontos"], jogador["vidas"], recorde, melhor_pontuacao_global())
             pygame.display.flip()
 
         _tela_game_over(tela, fonte_grande, fonte, jogador["pontos"], recorde)
