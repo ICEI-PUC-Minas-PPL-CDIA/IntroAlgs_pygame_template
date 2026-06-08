@@ -109,6 +109,7 @@ python -m pytest
 * [] Power-ups de velocidade.
 * [] Diferentes tipos de meteoros.
 * [] Sons e efeitos visuais.
+* [] Fazer os nossos proprios sprites
 * [x] Menu de pausa.
 * [x] Aumento progressivo da dificuldade.
 
