@@ -49,6 +49,34 @@ def _tela_inicial(tela, fonte_grande, fonte):
                     exit()
 
 
+def _tela_login(tela, fonte_grande, fonte):
+    nome = ""
+    while True:
+        tela.fill((0, 0, 0))
+        titulo = fonte_grande.render("SpaceNinja", True, AMARELO)
+        instrucao = fonte.render("Digite seu nome e pressione ENTER:", True, BRANCO)
+        campo = fonte.render(nome + "|", True, BRANCO)
+        tela.blit(titulo, (LARGURA_TELA // 2 - titulo.get_width() // 2, ALTURA_TELA // 2 - 120))
+        tela.blit(instrucao, (LARGURA_TELA // 2 - instrucao.get_width() // 2, ALTURA_TELA // 2 - 20))
+        tela.blit(campo, (LARGURA_TELA // 2 - campo.get_width() // 2, ALTURA_TELA // 2 + 20))
+        pygame.display.flip()
+
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    exit()
+                elif evento.key == pygame.K_RETURN and nome.strip():
+                    return nome.strip()
+                elif evento.key == pygame.K_BACKSPACE:
+                    nome = nome[:-1]
+                elif len(nome) < 20:
+                    nome += evento.unicode
+
+
 def _desenhar_hud(tela, fonte, pontos, vidas, recorde):
     tela.blit(fonte.render(f"Pontos: {pontos}", True, BRANCO), (10, 10))
     tela.blit(fonte.render(f"Vidas: {vidas}", True, AMARELO), (10, 40))
@@ -97,8 +125,7 @@ def executar_jogo():
     imagem_nave, imagem_meteoro, imagem_fundo = _carregar_imagens()
 
     _tela_inicial(tela, fonte_grande, fonte)
-
-    nome_jogador = "Jogador"
+    nome_jogador = _tela_login(tela, fonte_grande, fonte)
     recorde = obter_recorde_jogador(nome_jogador)
 
     jogando = True
