@@ -103,7 +103,7 @@ python -m pytest
 
 ## Possíveis Melhorias
 
-* [] Tela inicial.
+* [x] Tela inicial.
 * [] Sistema de ranking.
 * [] Power-ups de escudo.
 * [] Power-ups de velocidade.

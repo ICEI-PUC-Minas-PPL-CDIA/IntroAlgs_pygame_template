@@ -4,14 +4,14 @@ from src.config import (
     AZUL_ESCURO, BRANCO, VERMELHO, AMARELO,
     VELOCIDADE_JOGADOR, VIDAS_INICIAIS,
     INTERVALO_METEORO_INICIAL, INTERVALO_METEORO_MINIMO, REDUCAO_INTERVALO,
-    CAMINHO_RECORDE, CAMINHO_NAVE, CAMINHO_METEORO, CAMINHO_FUNDO,
+    CAMINHO_NAVE, CAMINHO_METEORO, CAMINHO_FUNDO,
 )
 from src.funcoes import limitar_valor, verificar_colisao, tomar_dano, jogador_perdeu
 from src.meteoro import criar_meteoro, mover_meteoros, desenhar_meteoros
-from src.dados import salvar_recorde, carregar_recorde
+from src.dados import obter_recorde_jogador, atualizar_ranking
 
 TAMANHO_NAVE = (60, 52)
-TAMANHO_METEORO_BASE = 45  # tamanho máximo; meteoros variam de 20 a 45
+TAMANHO_METEORO_BASE = 45
 
 
 def _carregar_imagens():
@@ -26,6 +26,27 @@ def _carregar_imagens():
         return nave, meteoro, fundo
     except Exception:
         return None, None, None
+
+
+def _tela_inicial(tela, fonte_grande, fonte):
+    tela.fill((0, 0, 0))
+    titulo = fonte_grande.render("SpaceNinja", True, AMARELO)
+    dica = fonte.render("Pressione ENTER para começar   ESC para sair", True, (180, 180, 180))
+    tela.blit(titulo, (LARGURA_TELA // 2 - titulo.get_width() // 2, ALTURA_TELA // 2 - 60))
+    tela.blit(dica, (LARGURA_TELA // 2 - dica.get_width() // 2, ALTURA_TELA // 2 + 20))
+    pygame.display.flip()
+
+    while True:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_RETURN:
+                    return
+                if evento.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    exit()
 
 
 def _desenhar_hud(tela, fonte, pontos, vidas, recorde):
@@ -74,7 +95,11 @@ def executar_jogo():
     fonte_grande = pygame.font.SysFont(None, 72)
 
     imagem_nave, imagem_meteoro, imagem_fundo = _carregar_imagens()
-    recorde = carregar_recorde(CAMINHO_RECORDE)
+
+    _tela_inicial(tela, fonte_grande, fonte)
+
+    nome_jogador = "Jogador"
+    recorde = obter_recorde_jogador(nome_jogador)
 
     jogando = True
     while jogando:
@@ -137,9 +162,8 @@ def executar_jogo():
 
             if jogador["pontos"] > recorde:
                 recorde = jogador["pontos"]
-                salvar_recorde(CAMINHO_RECORDE, recorde)
+                atualizar_ranking(nome_jogador, recorde)
 
-            # Renderização
             if imagem_fundo:
                 tela.blit(imagem_fundo, (0, 0))
             else:
