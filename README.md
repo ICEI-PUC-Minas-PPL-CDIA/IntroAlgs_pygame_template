@@ -104,12 +104,12 @@ python -m pytest
 ## Possíveis Melhorias
 
 * [x] Tela inicial.
-* [] Sistema de ranking.
+* [x] Sistema de ranking.
 * [] Power-ups de escudo.
 * [] Power-ups de velocidade.
 * [] Diferentes tipos de meteoros.
 * [] Sons e efeitos visuais.
-* [] Menu de pausa.
+* [x] Menu de pausa.
 * [x] Aumento progressivo da dificuldade.
 
 ## Observações
