@@ -153,9 +153,10 @@ def _menu_pausa(tela, fonte_grande, fonte):
                     return 0  # ESC na pausa volta ao jogo
 
 
-def _desenhar_hud(tela, fonte, pontos, vidas, recorde, global_score):
+def _desenhar_hud(tela, fonte, pontos, vidas, recorde, global_score, level):
     tela.blit(fonte.render(f"Pontos: {pontos}", True, BRANCO), (10, 10))
     tela.blit(fonte.render(f"Vidas: {vidas}", True, AMARELO), (10, 40))
+    tela.blit(fonte.render(f"Level: {level}", True, BRANCO), (10, 70))
     txt_recorde = fonte.render(f"Recorde: {recorde}", True, AMARELO)
     txt_global = fonte.render(f"Global: {global_score}", True, (180, 180, 255))
     tela.blit(txt_recorde, (LARGURA_TELA - txt_recorde.get_width() - 10, 10))
@@ -214,6 +215,8 @@ def executar_jogo():
         ultimo_meteoro = pygame.time.get_ticks()
         ultimo_ponto = pygame.time.get_ticks()
         ultima_reducao = pygame.time.get_ticks()
+        level = 1
+        nivel_msg_ate = 0
         rodando = True
 
         while rodando:
@@ -250,6 +253,8 @@ def executar_jogo():
             if agora - ultima_reducao >= 5000:
                 intervalo_meteoro = max(INTERVALO_METEORO_MINIMO, intervalo_meteoro - REDUCAO_INTERVALO)
                 ultima_reducao = agora
+                level += 1
+                nivel_msg_ate = agora + 2000
 
             meteoros = mover_meteoros(meteoros)
 
@@ -278,7 +283,10 @@ def executar_jogo():
 
             desenhar_meteoros(tela, meteoros, imagem_meteoro)
             _desenhar_jogador(tela, jogador, imagem_nave)
-            _desenhar_hud(tela, fonte, jogador["pontos"], jogador["vidas"], recorde, melhor_pontuacao_global())
+            _desenhar_hud(tela, fonte, jogador["pontos"], jogador["vidas"], recorde, melhor_pontuacao_global(), level)
+            if agora < nivel_msg_ate:
+                msg = fonte_grande.render(f"Level {level}!", True, AMARELO)
+                tela.blit(msg, (LARGURA_TELA // 2 - msg.get_width() // 2, ALTURA_TELA // 2 - 40))
             pygame.display.flip()
 
         _tela_game_over(tela, fonte_grande, fonte, jogador["pontos"], recorde)
