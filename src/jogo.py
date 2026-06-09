@@ -246,17 +246,18 @@ def executar_jogo():
             jogador["rect"].x = limitar_valor(jogador["rect"].x, 0, LARGURA_TELA - jogador["rect"].width)
             jogador["rect"].y = limitar_valor(jogador["rect"].y, 0, ALTURA_TELA - jogador["rect"].height)
 
-            if agora - ultimo_meteoro >= intervalo_meteoro:
+            if agora - ultimo_meteoro >= intervalo_meteoro and agora >= nivel_msg_ate:
                 meteoros.append(criar_meteoro())
                 ultimo_meteoro = agora
 
-            if agora - ultima_reducao >= 5000:
+            if agora - ultima_reducao >= 15000:
                 intervalo_meteoro = max(INTERVALO_METEORO_MINIMO, intervalo_meteoro - REDUCAO_INTERVALO)
                 ultima_reducao = agora
                 level += 1
                 nivel_msg_ate = agora + 2000
 
-            meteoros = mover_meteoros(meteoros)
+            if agora >= nivel_msg_ate:
+                meteoros = mover_meteoros(meteoros)
 
             if agora - ultimo_ponto >= 1000:
                 jogador["pontos"] += 1

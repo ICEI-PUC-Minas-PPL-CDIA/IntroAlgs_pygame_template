@@ -21,7 +21,7 @@ VELOCIDADE_METEORO_MIN = 3
 VELOCIDADE_METEORO_MAX = 6
 INTERVALO_METEORO_INICIAL = 1500  # milissegundos
 INTERVALO_METEORO_MINIMO = 400
-REDUCAO_INTERVALO = 50            # reduz a cada 5 s de jogo
+REDUCAO_INTERVALO = 150           # reduz a cada 15 s de jogo
 
 # Pontuação: 1 ponto por segundo sobrevivido
 PONTOS_POR_SEGUNDO = 1
