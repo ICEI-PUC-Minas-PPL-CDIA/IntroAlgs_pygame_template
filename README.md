@@ -76,6 +76,13 @@ cd NOME_DA_PASTA
 ```bash
 pip install -r requirements.txt
 ```
+Caso tenha um erro ao instalar as dependências, 
+verifique se o python está instalado,
+se sim execute esse comando no terminal
+
+```bash
+pip install pygame-ce pytest
+```
 
 ### 3. Executar o jogo
 
