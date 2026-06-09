@@ -268,6 +268,7 @@ def executar_jogo():
                     if verificar_colisao(jogador["rect"], m["rect"]):
                         jogador["vidas"] = tomar_dano(jogador["vidas"], 1)
                         jogador["invencivel_ate"] = agora + 1000
+                        meteoros.remove(m)
                         break
 
             if jogador_perdeu(jogador["vidas"]):
