@@ -31,9 +31,22 @@ def _carregar_imagens():
 def _tela_inicial(tela, fonte_grande, fonte):
     tela.fill((0, 0, 0))
     titulo = fonte_grande.render("SpaceNinja", True, AMARELO)
+    tela.blit(titulo, (LARGURA_TELA // 2 - titulo.get_width() // 2, 80))
+
+    linhas = [
+        "Desvie dos meteoros e sobreviva o maior tempo possivel!",
+        "",
+        "Setas direcionais  :  mover a nave",
+        "Cada segundo sobrevivido vale 1 ponto",
+        "Voce comeca com 3 vidas - cada colisao remove 1",
+        "ESC  :  pausar o jogo",
+    ]
+    for i, linha in enumerate(linhas):
+        txt = fonte.render(linha, True, BRANCO)
+        tela.blit(txt, (LARGURA_TELA // 2 - txt.get_width() // 2, 220 + i * 35))
+
     dica = fonte.render("Pressione ENTER para começar   ESC para sair", True, (180, 180, 180))
-    tela.blit(titulo, (LARGURA_TELA // 2 - titulo.get_width() // 2, ALTURA_TELA // 2 - 60))
-    tela.blit(dica, (LARGURA_TELA // 2 - dica.get_width() // 2, ALTURA_TELA // 2 + 20))
+    tela.blit(dica, (LARGURA_TELA // 2 - dica.get_width() // 2, ALTURA_TELA - 60))
     pygame.display.flip()
 
     while True:
@@ -140,9 +153,10 @@ def _menu_pausa(tela, fonte_grande, fonte):
                     return 0  # ESC na pausa volta ao jogo
 
 
-def _desenhar_hud(tela, fonte, pontos, vidas, recorde, global_score):
+def _desenhar_hud(tela, fonte, pontos, vidas, recorde, global_score, level):
     tela.blit(fonte.render(f"Pontos: {pontos}", True, BRANCO), (10, 10))
     tela.blit(fonte.render(f"Vidas: {vidas}", True, AMARELO), (10, 40))
+    tela.blit(fonte.render(f"Level: {level}", True, BRANCO), (10, 70))
     txt_recorde = fonte.render(f"Recorde: {recorde}", True, AMARELO)
     txt_global = fonte.render(f"Global: {global_score}", True, (180, 180, 255))
     tela.blit(txt_recorde, (LARGURA_TELA - txt_recorde.get_width() - 10, 10))
@@ -201,6 +215,8 @@ def executar_jogo():
         ultimo_meteoro = pygame.time.get_ticks()
         ultimo_ponto = pygame.time.get_ticks()
         ultima_reducao = pygame.time.get_ticks()
+        level = 1
+        nivel_msg_ate = 0
         rodando = True
 
         while rodando:
@@ -230,18 +246,21 @@ def executar_jogo():
             jogador["rect"].x = limitar_valor(jogador["rect"].x, 0, LARGURA_TELA - jogador["rect"].width)
             jogador["rect"].y = limitar_valor(jogador["rect"].y, 0, ALTURA_TELA - jogador["rect"].height)
 
-            if agora - ultimo_meteoro >= intervalo_meteoro:
+            if agora - ultimo_meteoro >= intervalo_meteoro and agora >= nivel_msg_ate:
                 meteoros.append(criar_meteoro())
                 ultimo_meteoro = agora
 
-            if agora - ultima_reducao >= 5000:
+            if agora - ultima_reducao >= 15000:
                 intervalo_meteoro = max(INTERVALO_METEORO_MINIMO, intervalo_meteoro - REDUCAO_INTERVALO)
                 ultima_reducao = agora
+                level += 1
+                nivel_msg_ate = agora + 2000
 
-            meteoros = mover_meteoros(meteoros)
+            if agora >= nivel_msg_ate:
+                meteoros = mover_meteoros(meteoros)
 
             if agora - ultimo_ponto >= 1000:
-                jogador["pontos"] += 1
+                jogador["pontos"] += level
                 ultimo_ponto = agora
 
             if agora > jogador["invencivel_ate"]:
@@ -265,7 +284,10 @@ def executar_jogo():
 
             desenhar_meteoros(tela, meteoros, imagem_meteoro)
             _desenhar_jogador(tela, jogador, imagem_nave)
-            _desenhar_hud(tela, fonte, jogador["pontos"], jogador["vidas"], recorde, melhor_pontuacao_global())
+            _desenhar_hud(tela, fonte, jogador["pontos"], jogador["vidas"], recorde, melhor_pontuacao_global(), level)
+            if agora < nivel_msg_ate:
+                msg = fonte_grande.render(f"Level {level}!", True, AMARELO)
+                tela.blit(msg, (LARGURA_TELA // 2 - msg.get_width() // 2, ALTURA_TELA // 2 - 40))
             pygame.display.flip()
 
         _tela_game_over(tela, fonte_grande, fonte, jogador["pontos"], recorde)
