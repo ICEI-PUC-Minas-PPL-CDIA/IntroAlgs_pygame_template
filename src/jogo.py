@@ -31,9 +31,22 @@ def _carregar_imagens():
 def _tela_inicial(tela, fonte_grande, fonte):
     tela.fill((0, 0, 0))
     titulo = fonte_grande.render("SpaceNinja", True, AMARELO)
+    tela.blit(titulo, (LARGURA_TELA // 2 - titulo.get_width() // 2, 80))
+
+    linhas = [
+        "Desvie dos meteoros e sobreviva o maior tempo possivel!",
+        "",
+        "Setas direcionais  :  mover a nave",
+        "Cada segundo sobrevivido vale 1 ponto",
+        "Voce comeca com 3 vidas - cada colisao remove 1",
+        "ESC  :  pausar o jogo",
+    ]
+    for i, linha in enumerate(linhas):
+        txt = fonte.render(linha, True, BRANCO)
+        tela.blit(txt, (LARGURA_TELA // 2 - txt.get_width() // 2, 220 + i * 35))
+
     dica = fonte.render("Pressione ENTER para começar   ESC para sair", True, (180, 180, 180))
-    tela.blit(titulo, (LARGURA_TELA // 2 - titulo.get_width() // 2, ALTURA_TELA // 2 - 60))
-    tela.blit(dica, (LARGURA_TELA // 2 - dica.get_width() // 2, ALTURA_TELA // 2 + 20))
+    tela.blit(dica, (LARGURA_TELA // 2 - dica.get_width() // 2, ALTURA_TELA - 60))
     pygame.display.flip()
 
     while True:
