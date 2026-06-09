@@ -13,7 +13,12 @@ def criar_meteoro(level=1):
     tamanho = random.randint(20, 45)
     velocidade = random.randint(VELOCIDADE_METEORO_MIN, VELOCIDADE_METEORO_MAX)
 
-    if level >= 10:
+    if level >= 20:
+        direcao = random.choice([
+            "cima", "baixo", "esquerda", "direita",
+            "cima_esquerda", "cima_direita", "baixo_esquerda", "baixo_direita"
+        ])
+    elif level >= 10:
         direcao = random.choice(["cima", "baixo", "esquerda", "direita"])
     else:
         direcao = "cima"
@@ -30,10 +35,22 @@ def criar_meteoro(level=1):
         y = random.randint(0, ALTURA_TELA - tamanho)
         rect = pygame.Rect(-tamanho, y, tamanho, tamanho)
         vel_x, vel_y = velocidade, 0
-    else:
+    elif direcao == "direita":
         y = random.randint(0, ALTURA_TELA - tamanho)
         rect = pygame.Rect(LARGURA_TELA, y, tamanho, tamanho)
         vel_x, vel_y = -velocidade, 0
+    elif direcao == "cima_esquerda":
+        rect = pygame.Rect(-tamanho, -tamanho, tamanho, tamanho)
+        vel_x, vel_y = velocidade, velocidade
+    elif direcao == "cima_direita":
+        rect = pygame.Rect(LARGURA_TELA, -tamanho, tamanho, tamanho)
+        vel_x, vel_y = -velocidade, velocidade
+    elif direcao == "baixo_esquerda":
+        rect = pygame.Rect(-tamanho, ALTURA_TELA, tamanho, tamanho)
+        vel_x, vel_y = velocidade, -velocidade
+    else:  # baixo_direita
+        rect = pygame.Rect(LARGURA_TELA, ALTURA_TELA, tamanho, tamanho)
+        vel_x, vel_y = -velocidade, -velocidade
 
     return {"rect": rect, "vel_x": vel_x, "vel_y": vel_y, "tamanho": tamanho}
 
