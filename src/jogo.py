@@ -260,7 +260,7 @@ def executar_jogo():
                 meteoros = mover_meteoros(meteoros)
 
             if agora - ultimo_ponto >= 1000:
-                jogador["pontos"] += 1
+                jogador["pontos"] += level
                 ultimo_ponto = agora
 
             if agora > jogador["invencivel_ate"]:
