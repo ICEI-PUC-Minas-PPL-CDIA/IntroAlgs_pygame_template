@@ -1,4 +1,6 @@
+import math
 import pygame
+import random
 from src.config import (
     LARGURA_TELA, ALTURA_TELA, FPS, TITULO_JOGO,
     AZUL_ESCURO, BRANCO, VERMELHO, AMARELO,
@@ -153,6 +155,32 @@ def _menu_pausa(tela, fonte_grande, fonte):
                     return 0  # ESC na pausa volta ao jogo
 
 
+def _criar_explosao(particulas, pos):
+    """Adiciona partículas de explosão na posição dada."""
+    for _ in range(12):
+        angulo = random.uniform(0, 2 * math.pi)
+        velocidade = random.uniform(2, 6)
+        particulas.append({
+            "x": pos[0], "y": pos[1],
+            "vel_x": velocidade * math.cos(angulo),
+            "vel_y": velocidade * math.sin(angulo),
+            "raio": random.randint(3, 6),
+            "vida": random.randint(15, 25),
+        })
+
+
+def _atualizar_e_desenhar_particulas(tela, particulas):
+    """Move, encolhe e desenha partículas; remove as que expiraram."""
+    for p in particulas:
+        p["x"] += p["vel_x"]
+        p["y"] += p["vel_y"]
+        p["raio"] -= 0.3
+        p["vida"] -= 1
+        if p["raio"] > 0:
+            pygame.draw.circle(tela, (255, 140, 0), (int(p["x"]), int(p["y"])), int(p["raio"]))
+    particulas[:] = [p for p in particulas if p["vida"] > 0]
+
+
 def _desenhar_hud(tela, fonte, pontos, vidas, recorde, global_score, level):
     tela.blit(fonte.render(f"Pontos: {pontos}", True, BRANCO), (10, 10))
     tela.blit(fonte.render(f"Vidas: {vidas}", True, AMARELO), (10, 40))
@@ -211,6 +239,7 @@ def executar_jogo():
     while jogando:
         jogador = _novo_jogo(imagem_nave)
         meteoros = []
+        particulas = []
         intervalo_meteoro = INTERVALO_METEORO_INICIAL
         ultimo_meteoro = pygame.time.get_ticks()
         ultimo_ponto = pygame.time.get_ticks()
@@ -269,6 +298,7 @@ def executar_jogo():
                         jogador["vidas"] = tomar_dano(jogador["vidas"], 1)
                         jogador["invencivel_ate"] = agora + 2000
                         meteoros.remove(m)
+                        _criar_explosao(particulas, m["rect"].center)
                         break
 
             if jogador_perdeu(jogador["vidas"]):
@@ -284,6 +314,7 @@ def executar_jogo():
                 tela.fill(AZUL_ESCURO)
 
             desenhar_meteoros(tela, meteoros, imagem_meteoro)
+            _atualizar_e_desenhar_particulas(tela, particulas)
             tempo_restante = jogador["invencivel_ate"] - agora
             if tempo_restante <= 0 or tempo_restante <= 1000 or (agora // 50) % 2 == 0:
                 _desenhar_jogador(tela, jogador, imagem_nave)
