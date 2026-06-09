@@ -120,7 +120,7 @@ python -m pytest
 * [] Diferentes tipos de meteoros.
 * [] Sons e efeitos visuais.
 * [] Fazer os nossos proprios sprites
-* [] meteoros de todas as direções
+* [x] meteoros de todas as direções
 * [] trajetorias diferentes(curvilineas e em diagonal)
 * [] Diferentes dificuldades(facil, médio, dificil, impossivel)
 * [x] Menu de pausa.
