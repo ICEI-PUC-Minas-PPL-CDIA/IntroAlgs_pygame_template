@@ -267,7 +267,7 @@ def executar_jogo():
                 for m in meteoros:
                     if verificar_colisao(jogador["rect"], m["rect"]):
                         jogador["vidas"] = tomar_dano(jogador["vidas"], 1)
-                        jogador["invencivel_ate"] = agora + 1000
+                        jogador["invencivel_ate"] = agora + 2000
                         meteoros.remove(m)
                         break
 
@@ -284,7 +284,9 @@ def executar_jogo():
                 tela.fill(AZUL_ESCURO)
 
             desenhar_meteoros(tela, meteoros, imagem_meteoro)
-            _desenhar_jogador(tela, jogador, imagem_nave)
+            tempo_restante = jogador["invencivel_ate"] - agora
+            if tempo_restante <= 0 or tempo_restante <= 1000 or (agora // 50) % 2 == 0:
+                _desenhar_jogador(tela, jogador, imagem_nave)
             _desenhar_hud(tela, fonte, jogador["pontos"], jogador["vidas"], recorde, melhor_pontuacao_global(), level)
             if agora < nivel_msg_ate:
                 msg = fonte_grande.render(f"Level {level}!", True, AMARELO)
