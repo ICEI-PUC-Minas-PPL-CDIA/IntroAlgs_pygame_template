@@ -121,7 +121,7 @@ python -m pytest
 * [] Sons e efeitos visuais.
 * [] Fazer os nossos proprios sprites
 * [x] meteoros de todas as direções
-* [] trajetorias diferentes(curvilineas e em diagonal)
+* [x] trajetorias diferentes(em diagonal)
 * [] Diferentes dificuldades(facil, médio, dificil, impossivel)
 * [x] Menu de pausa.
 * [x] Aumento progressivo da dificuldade.
