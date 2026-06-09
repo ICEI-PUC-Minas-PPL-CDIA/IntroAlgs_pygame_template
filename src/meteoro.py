@@ -8,20 +8,60 @@ from src.config import (
 )
 
 
-def criar_meteoro():
-    """Cria um meteoro em posição aleatória no topo da tela."""
+def criar_meteoro(level=1):
+    """Cria um meteoro; a partir do level 10 vem de qualquer direção."""
     tamanho = random.randint(20, 45)
-    x = random.randint(0, LARGURA_TELA - tamanho)
     velocidade = random.randint(VELOCIDADE_METEORO_MIN, VELOCIDADE_METEORO_MAX)
-    rect = pygame.Rect(x, -tamanho, tamanho, tamanho)
-    return {"rect": rect, "velocidade": velocidade, "tamanho": tamanho}
+
+    if level >= 20:
+        direcao = random.choice([
+            "cima", "baixo", "esquerda", "direita",
+            "cima_esquerda", "cima_direita", "baixo_esquerda", "baixo_direita"
+        ])
+    elif level >= 10:
+        direcao = random.choice(["cima", "baixo", "esquerda", "direita"])
+    else:
+        direcao = "cima"
+
+    if direcao == "cima":
+        x = random.randint(0, LARGURA_TELA - tamanho)
+        rect = pygame.Rect(x, -tamanho, tamanho, tamanho)
+        vel_x, vel_y = 0, velocidade
+    elif direcao == "baixo":
+        x = random.randint(0, LARGURA_TELA - tamanho)
+        rect = pygame.Rect(x, ALTURA_TELA, tamanho, tamanho)
+        vel_x, vel_y = 0, -velocidade
+    elif direcao == "esquerda":
+        y = random.randint(0, ALTURA_TELA - tamanho)
+        rect = pygame.Rect(-tamanho, y, tamanho, tamanho)
+        vel_x, vel_y = velocidade, 0
+    elif direcao == "direita":
+        y = random.randint(0, ALTURA_TELA - tamanho)
+        rect = pygame.Rect(LARGURA_TELA, y, tamanho, tamanho)
+        vel_x, vel_y = -velocidade, 0
+    elif direcao == "cima_esquerda":
+        rect = pygame.Rect(-tamanho, -tamanho, tamanho, tamanho)
+        vel_x, vel_y = velocidade, velocidade
+    elif direcao == "cima_direita":
+        rect = pygame.Rect(LARGURA_TELA, -tamanho, tamanho, tamanho)
+        vel_x, vel_y = -velocidade, velocidade
+    elif direcao == "baixo_esquerda":
+        rect = pygame.Rect(-tamanho, ALTURA_TELA, tamanho, tamanho)
+        vel_x, vel_y = velocidade, -velocidade
+    else:  # baixo_direita
+        rect = pygame.Rect(LARGURA_TELA, ALTURA_TELA, tamanho, tamanho)
+        vel_x, vel_y = -velocidade, -velocidade
+
+    return {"rect": rect, "vel_x": vel_x, "vel_y": vel_y, "tamanho": tamanho}
 
 
 def mover_meteoros(meteoros):
-    """Move todos os meteoros para baixo e remove os que saíram da tela."""
+    """Move todos os meteoros e remove os que saíram da tela."""
     for m in meteoros:
-        m["rect"].y += m["velocidade"]
-    return [m for m in meteoros if m["rect"].top < ALTURA_TELA]
+        m["rect"].x += m["vel_x"]
+        m["rect"].y += m["vel_y"]
+    area_valida = pygame.Rect(-100, -100, LARGURA_TELA + 200, ALTURA_TELA + 200)
+    return [m for m in meteoros if m["rect"].colliderect(area_valida)]
 
 
 def desenhar_meteoros(tela, meteoros, imagem=None):

@@ -116,11 +116,12 @@ python -m pytest
 * [x] Sistema de ranking.
 * [] Power-ups de escudo.
 * [] Power-ups de velocidade.
+* [] Power-ups de ataque (consede a capacidade de destruir meteoros com tiros)
 * [] Diferentes tipos de meteoros.
 * [] Sons e efeitos visuais.
 * [] Fazer os nossos proprios sprites
-* [] meteoros de todas as direções
-* [] trajetorias diferentes(curvilineas e em diagonal)
+* [x] meteoros de todas as direções
+* [x] trajetorias diferentes(em diagonal)
 * [] Diferentes dificuldades(facil, médio, dificil, impossivel)
 * [x] Menu de pausa.
 * [x] Aumento progressivo da dificuldade.

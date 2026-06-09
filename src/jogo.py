@@ -247,7 +247,7 @@ def executar_jogo():
             jogador["rect"].y = limitar_valor(jogador["rect"].y, 0, ALTURA_TELA - jogador["rect"].height)
 
             if agora - ultimo_meteoro >= intervalo_meteoro and agora >= nivel_msg_ate:
-                meteoros.append(criar_meteoro())
+                meteoros.append(criar_meteoro(level))
                 ultimo_meteoro = agora
 
             if agora - ultima_reducao >= 15000:
