@@ -107,6 +107,8 @@ python -m pytest
 * [x] Tela de fim de jogo.
 * [x] Execução através de `python main.py`.
 * [x] Testes funcionando com `pytest`.
+* [x] explicação na tela inicial
+* [x] leveis a cada aumento na dificuldade
 
 ## Possíveis Melhorias
 
