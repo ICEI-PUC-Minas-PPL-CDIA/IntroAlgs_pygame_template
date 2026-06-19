@@ -8,10 +8,12 @@ from src.config import (
 )
 
 
-def criar_meteoro(level=1):
+def criar_meteoro(level=1, vel_min=None, vel_max=None):
     """Cria um meteoro; a partir do level 10 vem de qualquer direção."""
     tamanho = random.randint(20, 45)
-    velocidade = random.randint(VELOCIDADE_METEORO_MIN, VELOCIDADE_METEORO_MAX)
+    vmin = vel_min if vel_min is not None else VELOCIDADE_METEORO_MIN
+    vmax = vel_max if vel_max is not None else VELOCIDADE_METEORO_MAX
+    velocidade = random.randint(vmin, vmax)
 
     if level >= 20:
         direcao = random.choice([

@@ -122,7 +122,8 @@ python -m pytest
 * [] Fazer os nossos proprios sprites
 * [x] meteoros de todas as direções
 * [x] trajetorias diferentes(em diagonal)
-* [] Diferentes dificuldades(facil, médio, dificil, impossivel)
+* [x] Diferentes dificuldades(facil, médio, dificil, impossivel)
+* [] Ser possivel de se jogar multiplayer
 * [x] Menu de pausa.
 * [x] Aumento progressivo da dificuldade.
 

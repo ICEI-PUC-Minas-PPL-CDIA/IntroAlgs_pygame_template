@@ -16,7 +16,7 @@ AMARELO = (255, 220, 50)
 VELOCIDADE_JOGADOR = 5
 VIDAS_INICIAIS = 3
 
-# Meteoros
+# Meteoros (padrão Médio)
 VELOCIDADE_METEORO_MIN = 3
 VELOCIDADE_METEORO_MAX = 6
 INTERVALO_METEORO_INICIAL = 1500  # milissegundos
@@ -25,6 +25,14 @@ REDUCAO_INTERVALO = 150           # reduz a cada 15 s de jogo
 
 # Pontuação: 1 ponto por segundo sobrevivido
 PONTOS_POR_SEGUNDO = 1
+
+# Dificuldades: (vel_min, vel_max, intervalo_inicial, intervalo_minimo, reducao, pontos_por_segundo)
+DIFICULDADES = {
+    "Facil":      (2, 4, 2200, 700, 100, 1),
+    "Medio":      (3, 6, 1500, 400, 150, 2),
+    "Dificil":    (4, 8, 1000, 300, 200, 4),
+    "Impossivel": (6, 12, 600, 200, 250, 7),
+}
 
 CAMINHO_RECORDE = "data/recorde.txt"
 CAMINHO_NAVE = "assets/imagens/nave.png"
