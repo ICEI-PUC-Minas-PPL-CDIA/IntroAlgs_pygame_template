@@ -38,3 +38,8 @@ CAMINHO_RECORDE = "data/recorde.txt"
 CAMINHO_NAVE = "assets/imagens/nave.png"
 CAMINHO_METEORO = "assets/imagens/meteoro.png"
 CAMINHO_FUNDO = "assets/imagens/fundo.png"
+
+CAMINHO_SOM_COLISAO = "assets/sons/colisao.ogg"
+CAMINHO_SOM_LEVEL_UP = "assets/sons/level_up.ogg"
+CAMINHO_SOM_GAME_OVER = "assets/sons/game_over.ogg"
+CAMINHO_MUSICA = "assets/sons/musica.ogg"

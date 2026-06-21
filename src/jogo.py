@@ -1,10 +1,14 @@
+import math
 import pygame
+import random
+from pathlib import Path
 from src.config import (
     LARGURA_TELA, ALTURA_TELA, FPS, TITULO_JOGO,
     AZUL_ESCURO, BRANCO, VERMELHO, AMARELO,
     VELOCIDADE_JOGADOR, VIDAS_INICIAIS,
     INTERVALO_METEORO_INICIAL, INTERVALO_METEORO_MINIMO, REDUCAO_INTERVALO,
-    CAMINHO_NAVE, CAMINHO_METEORO, CAMINHO_FUNDO, DIFICULDADES,
+    CAMINHO_NAVE, CAMINHO_METEORO, CAMINHO_FUNDO,
+    CAMINHO_SOM_COLISAO, CAMINHO_SOM_LEVEL_UP, CAMINHO_SOM_GAME_OVER, CAMINHO_MUSICA,
 )
 from src.funcoes import limitar_valor, verificar_colisao, tomar_dano, jogador_perdeu
 from src.meteoro import criar_meteoro, mover_meteoros, desenhar_meteoros
@@ -28,6 +32,56 @@ def _carregar_imagens():
         return None, None, None
 
 
+def _resolver_som(caminho_ogg):
+    """Retorna caminho existente (.ogg ou .wav) ou None."""
+    if Path(caminho_ogg).is_file():
+        return caminho_ogg
+    caminho_wav = caminho_ogg.replace(".ogg", ".wav")
+    if Path(caminho_wav).is_file():
+        return caminho_wav
+    return None
+
+
+def _carregar_sons():
+    """Tenta carregar os sons; retorna None para os que falharem."""
+    sons = {"colisao": None, "level_up": None, "game_over": None, "musica_ok": False}
+    try:
+        pygame.mixer.init()
+        for nome, caminho in (
+            ("colisao", CAMINHO_SOM_COLISAO),
+            ("level_up", CAMINHO_SOM_LEVEL_UP),
+            ("game_over", CAMINHO_SOM_GAME_OVER),
+        ):
+            resolvido = _resolver_som(caminho)
+            if resolvido:
+                sons[nome] = pygame.mixer.Sound(resolvido)
+        musica = _resolver_som(CAMINHO_MUSICA)
+        if musica:
+            pygame.mixer.music.load(musica)
+            sons["musica_ok"] = True
+    except Exception:
+        pass
+    return sons
+
+
+def _tocar(sons, nome):
+    """Toca um efeito sonoro se ele existir."""
+    if sons.get(nome):
+        sons[nome].play()
+
+
+def _iniciar_musica(sons):
+    """Inicia trilha em loop se disponível."""
+    if sons.get("musica_ok"):
+        pygame.mixer.music.play(-1)
+
+
+def _parar_musica():
+    """Para a trilha de fundo."""
+    try:
+        pygame.mixer.music.stop()
+    except Exception:
+        pass
 def _tela_dificuldade(tela, fonte_grande, fonte):
     opcoes = list(DIFICULDADES.keys())
     selecionado = 1  # Medio por padrao
@@ -187,6 +241,33 @@ def _menu_pausa(tela, fonte_grande, fonte):
                     return 0  # ESC na pausa volta ao jogo
 
 
+def _criar_explosao(particulas, pos):
+    """Adiciona partículas de explosão na posição dada."""
+    for _ in range(12):
+        angulo = random.uniform(0, 2 * math.pi)
+        velocidade = random.uniform(2, 6)
+        particulas.append({
+            "x": pos[0], "y": pos[1],
+            "vel_x": velocidade * math.cos(angulo),
+            "vel_y": velocidade * math.sin(angulo),
+            "raio": random.randint(3, 6),
+            "vida": random.randint(15, 25),
+        })
+
+
+def _atualizar_e_desenhar_particulas(tela, particulas):
+    """Move, encolhe e desenha partículas; remove as que expiraram."""
+    for p in particulas:
+        p["x"] += p["vel_x"]
+        p["y"] += p["vel_y"]
+        p["raio"] -= 0.3
+        p["vida"] -= 1
+        if p["raio"] > 0:
+            pygame.draw.circle(tela, (255, 140, 0), (int(p["x"]), int(p["y"])), int(p["raio"]))
+    particulas[:] = [p for p in particulas if p["vida"] > 0]
+
+
+def _desenhar_hud(tela, fonte, pontos, vidas, recorde, global_score, level):
 def _desenhar_hud(tela, fonte, pontos, vidas, recorde, global_score, level, dificuldade):
     tela.blit(fonte.render(f"Pontos: {pontos}", True, BRANCO), (10, 10))
     tela.blit(fonte.render(f"Vidas: {vidas}", True, AMARELO), (10, 40))
@@ -237,6 +318,7 @@ def executar_jogo():
     fonte_grande = pygame.font.SysFont(None, 72)
 
     imagem_nave, imagem_meteoro, imagem_fundo = _carregar_imagens()
+    sons = _carregar_sons()
 
     _tela_inicial(tela, fonte_grande, fonte)
     nome_jogador = _tela_login(tela, fonte_grande, fonte)
@@ -248,6 +330,8 @@ def executar_jogo():
     while jogando:
         jogador = _novo_jogo(imagem_nave)
         meteoros = []
+        particulas = []
+        intervalo_meteoro = INTERVALO_METEORO_INICIAL
         intervalo_meteoro = interv_inicial
         ultimo_meteoro = pygame.time.get_ticks()
         ultimo_ponto = pygame.time.get_ticks()
@@ -255,6 +339,7 @@ def executar_jogo():
         level = 1
         nivel_msg_ate = 0
         rodando = True
+        _iniciar_musica(sons)
 
         while rodando:
             relogio.tick(FPS)
@@ -265,7 +350,14 @@ def executar_jogo():
                     pygame.quit()
                     return
                 if evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
+                    if sons.get("musica_ok"):
+                        pygame.mixer.music.pause()
                     resultado = _menu_pausa(tela, fonte_grande, fonte)
+                    if sons.get("musica_ok"):
+                        if resultado == 2:
+                            _parar_musica()
+                        else:
+                            pygame.mixer.music.unpause()
                     if resultado == 2:
                         pygame.quit()
                         return
@@ -292,6 +384,7 @@ def executar_jogo():
                 ultima_reducao = agora
                 level += 1
                 nivel_msg_ate = agora + 2000
+                _tocar(sons, "level_up")
 
             if agora >= nivel_msg_ate:
                 meteoros = mover_meteoros(meteoros)
@@ -304,7 +397,10 @@ def executar_jogo():
                 for m in meteoros:
                     if verificar_colisao(jogador["rect"], m["rect"]):
                         jogador["vidas"] = tomar_dano(jogador["vidas"], 1)
-                        jogador["invencivel_ate"] = agora + 1000
+                        jogador["invencivel_ate"] = agora + 2000
+                        meteoros.remove(m)
+                        _criar_explosao(particulas, m["rect"].center)
+                        _tocar(sons, "colisao")
                         break
 
             if jogador_perdeu(jogador["vidas"]):
@@ -320,6 +416,11 @@ def executar_jogo():
                 tela.fill(AZUL_ESCURO)
 
             desenhar_meteoros(tela, meteoros, imagem_meteoro)
+            _atualizar_e_desenhar_particulas(tela, particulas)
+            tempo_restante = jogador["invencivel_ate"] - agora
+            if tempo_restante <= 0 or tempo_restante <= 1000 or (agora // 50) % 2 == 0:
+                _desenhar_jogador(tela, jogador, imagem_nave)
+            _desenhar_hud(tela, fonte, jogador["pontos"], jogador["vidas"], recorde, melhor_pontuacao_global(), level)
             _desenhar_jogador(tela, jogador, imagem_nave)
             _desenhar_hud(tela, fonte, jogador["pontos"], jogador["vidas"], recorde, melhor_pontuacao_global(), level, dificuldade)
             if agora < nivel_msg_ate:
@@ -327,6 +428,8 @@ def executar_jogo():
                 tela.blit(msg, (LARGURA_TELA // 2 - msg.get_width() // 2, ALTURA_TELA // 2 - 40))
             pygame.display.flip()
 
+        _parar_musica()
+        _tocar(sons, "game_over")
         _tela_game_over(tela, fonte_grande, fonte, jogador["pontos"], recorde)
         dificuldade = _tela_dificuldade(tela, fonte_grande, fonte)
         vel_min, vel_max, interv_inicial, interv_min, reducao, pts_por_segundo = DIFICULDADES[dificuldade]
