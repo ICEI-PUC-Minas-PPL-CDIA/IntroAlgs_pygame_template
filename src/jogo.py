@@ -10,10 +10,11 @@ from src.config import (
     CAMINHO_NAVE, CAMINHO_METEORO, CAMINHO_FUNDO,
     CAMINHO_SOM_COLISAO, CAMINHO_SOM_LEVEL_UP, CAMINHO_SOM_GAME_OVER, CAMINHO_MUSICA,
     DIFICULDADES,
+    VELOCIDADE_JOGADOR_2, DISTANCIA_REVIVE, TEMPO_REVIVE, TEMPO_CORPO,
 )
 from src.funcoes import limitar_valor, verificar_colisao, tomar_dano, jogador_perdeu
 from src.meteoro import criar_meteoro, mover_meteoros, desenhar_meteoros
-from src.dados import obter_recorde_jogador, atualizar_ranking, top10, melhor_pontuacao_global
+from src.dados import obter_recorde_jogador, atualizar_ranking, top10, melhor_pontuacao_global, atualizar_ranking_coop, top10_coop
 
 TAMANHO_NAVE = (60, 52)
 TAMANHO_METEORO_BASE = 45
@@ -152,12 +153,80 @@ def _tela_inicial(tela, fonte_grande, fonte):
                     exit()
 
 
-def _tela_login(tela, fonte_grande, fonte):
+def _tela_modo(tela, fonte_grande, fonte):
+    opcoes = ["Solo", "Competicao", "Cooperativo"]
+    selecionado = 0
+
+    while True:
+        tela.fill((0, 0, 0))
+        titulo = fonte_grande.render("Modo de Jogo", True, AMARELO)
+        tela.blit(titulo, (LARGURA_TELA // 2 - titulo.get_width() // 2, 160))
+
+        for i, nome in enumerate(opcoes):
+            cor = AMARELO if i == selecionado else BRANCO
+            txt = fonte.render(nome, True, cor)
+            tela.blit(txt, (LARGURA_TELA // 2 - txt.get_width() // 2, 300 + i * 55))
+
+        dica = fonte.render("Setas para escolher   ENTER para confirmar", True, (180, 180, 180))
+        tela.blit(dica, (LARGURA_TELA // 2 - dica.get_width() // 2, ALTURA_TELA - 60))
+        pygame.display.flip()
+
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_UP:
+                    selecionado = (selecionado - 1) % len(opcoes)
+                elif evento.key == pygame.K_DOWN:
+                    selecionado = (selecionado + 1) % len(opcoes)
+                elif evento.key == pygame.K_RETURN:
+                    return opcoes[selecionado]
+                elif evento.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    exit()
+
+
+def _tela_modo(tela, fonte_grande, fonte):
+    opcoes = ["Solo", "Competicao", "Cooperativo"]
+    selecionado = 0
+
+    while True:
+        tela.fill((0, 0, 0))
+        titulo = fonte_grande.render("Modo de Jogo", True, AMARELO)
+        tela.blit(titulo, (LARGURA_TELA // 2 - titulo.get_width() // 2, 160))
+
+        for i, nome in enumerate(opcoes):
+            cor = AMARELO if i == selecionado else BRANCO
+            txt = fonte.render(nome, True, cor)
+            tela.blit(txt, (LARGURA_TELA // 2 - txt.get_width() // 2, 300 + i * 55))
+
+        dica = fonte.render("Setas para escolher   ENTER para confirmar", True, (180, 180, 180))
+        tela.blit(dica, (LARGURA_TELA // 2 - dica.get_width() // 2, ALTURA_TELA - 60))
+        pygame.display.flip()
+
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_UP:
+                    selecionado = (selecionado - 1) % len(opcoes)
+                elif evento.key == pygame.K_DOWN:
+                    selecionado = (selecionado + 1) % len(opcoes)
+                elif evento.key == pygame.K_RETURN:
+                    return opcoes[selecionado]
+                elif evento.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    exit()
+
+
+def _tela_login(tela, fonte_grande, fonte, numero=1):
     nome = ""
     while True:
         tela.fill((0, 0, 0))
         titulo = fonte_grande.render("SpaceNinja", True, AMARELO)
-        instrucao = fonte.render("Digite seu nome e pressione ENTER:", True, BRANCO)
+        instrucao = fonte.render(f"Jogador {numero} - Digite seu nome e pressione ENTER:", True, BRANCO)
         campo = fonte.render(nome + "|", True, BRANCO)
         tela.blit(titulo, (LARGURA_TELA // 2 - titulo.get_width() // 2, ALTURA_TELA // 2 - 120))
         tela.blit(instrucao, (LARGURA_TELA // 2 - instrucao.get_width() // 2, ALTURA_TELA // 2 - 20))
@@ -330,7 +399,11 @@ def executar_jogo():
     sons = _carregar_sons()
 
     _tela_inicial(tela, fonte_grande, fonte)
-    nome_jogador = _tela_login(tela, fonte_grande, fonte)
+    modo = _tela_modo(tela, fonte_grande, fonte)
+    nome_jogador = _tela_login(tela, fonte_grande, fonte, numero=1)
+    nome_jogador2 = None
+    if modo in ("Competicao", "Cooperativo"):
+        nome_jogador2 = _tela_login(tela, fonte_grande, fonte, numero=2)
     dificuldade = _tela_dificuldade(tela, fonte_grande, fonte)
     vel_min, vel_max, interv_inicial, interv_min, reducao, pts_por_segundo = DIFICULDADES[dificuldade]
     recorde = obter_recorde_jogador(nome_jogador)
