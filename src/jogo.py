@@ -530,6 +530,208 @@ def _loop_competicao(tela, relogio, fonte, fonte_grande, imagem_nave, imagem_met
     return jogador1["pontos"], jogador2["pontos"]
 
 
+def _distancia(r1, r2):
+    dx = r1.centerx - r2.centerx
+    dy = r1.centery - r2.centery
+    return math.sqrt(dx * dx + dy * dy)
+
+
+def _desenhar_hud_coop(tela, fonte, pontos, vidas1, nome1, vidas2, nome2, level, dificuldade):
+    tela.blit(fonte.render(f"{nome1} Vidas: {vidas1}", True, (100, 200, 255)), (10, 10))
+    tela.blit(fonte.render(f"{nome2} Vidas: {vidas2}", True, (255, 100, 100)),
+              (LARGURA_TELA - fonte.size(f"{nome2} Vidas: {vidas2}")[0] - 10, 10))
+    tela.blit(fonte.render(f"Pts: {pontos}  Level: {level}  Dif: {dificuldade}", True, BRANCO),
+              (LARGURA_TELA // 2 - 110, 10))
+
+
+def _loop_cooperativo(tela, relogio, fonte, fonte_grande, imagem_nave, imagem_meteoro,
+                      imagem_fundo, sons, nome1, nome2, dificuldade,
+                      vel_min, vel_max, interv_inicial, interv_min, reducao, pts_por_segundo):
+    jogador1 = _novo_jogo(imagem_nave, "esquerda")
+    jogador2 = _novo_jogo(imagem_nave, "direita")
+    nave2_img = pygame.transform.flip(imagem_nave, False, True) if imagem_nave else None
+
+    meteoros, particulas = [], []
+    intervalo_meteoro = interv_inicial
+    ultimo_meteoro = ultimo_ponto = ultima_reducao = pygame.time.get_ticks()
+    level, nivel_msg_ate = 1, 0
+    pontos_coop = 0
+
+    # corpo = {"pos": (x,y), "morte_em": timestamp, "dono": jogador_dict, "progresso_revive": 0, "revivendo_desde": None}
+    corpo1 = None  # corpo do jogador1 quando morto
+    corpo2 = None  # corpo do jogador2 quando morto
+
+    _iniciar_musica(sons)
+
+    while True:
+        relogio.tick(FPS)
+        agora = pygame.time.get_ticks()
+
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
+                if sons.get("musica_ok"):
+                    pygame.mixer.music.pause()
+                resultado = _menu_pausa(tela, fonte_grande, fonte)
+                if sons.get("musica_ok"):
+                    if resultado == 2:
+                        _parar_musica()
+                    else:
+                        pygame.mixer.music.unpause()
+                if resultado == 2:
+                    pygame.quit()
+                    exit()
+
+        teclas = pygame.key.get_pressed()
+        if not jogador_perdeu(jogador1["vidas"]):
+            if teclas[pygame.K_a]: jogador1["rect"].x -= VELOCIDADE_JOGADOR
+            if teclas[pygame.K_d]: jogador1["rect"].x += VELOCIDADE_JOGADOR
+            if teclas[pygame.K_w]: jogador1["rect"].y -= VELOCIDADE_JOGADOR
+            if teclas[pygame.K_s]: jogador1["rect"].y += VELOCIDADE_JOGADOR
+            jogador1["rect"].x = limitar_valor(jogador1["rect"].x, 0, LARGURA_TELA - jogador1["rect"].width)
+            jogador1["rect"].y = limitar_valor(jogador1["rect"].y, 0, ALTURA_TELA - jogador1["rect"].height)
+
+        if not jogador_perdeu(jogador2["vidas"]):
+            if teclas[pygame.K_LEFT]:  jogador2["rect"].x -= VELOCIDADE_JOGADOR_2
+            if teclas[pygame.K_RIGHT]: jogador2["rect"].x += VELOCIDADE_JOGADOR_2
+            if teclas[pygame.K_UP]:    jogador2["rect"].y -= VELOCIDADE_JOGADOR_2
+            if teclas[pygame.K_DOWN]:  jogador2["rect"].y += VELOCIDADE_JOGADOR_2
+            jogador2["rect"].x = limitar_valor(jogador2["rect"].x, 0, LARGURA_TELA - jogador2["rect"].width)
+            jogador2["rect"].y = limitar_valor(jogador2["rect"].y, 0, ALTURA_TELA - jogador2["rect"].height)
+
+        # --- Gerar/mover meteoros ---
+        if agora - ultimo_meteoro >= intervalo_meteoro and agora >= nivel_msg_ate:
+            meteoros.append(criar_meteoro(level, vel_min, vel_max))
+            ultimo_meteoro = agora
+        if agora - ultima_reducao >= 15000:
+            intervalo_meteoro = max(interv_min, intervalo_meteoro - reducao)
+            ultima_reducao = agora
+            level += 1
+            nivel_msg_ate = agora + 2000
+            _tocar(sons, "level_up")
+        if agora >= nivel_msg_ate:
+            meteoros = mover_meteoros(meteoros)
+
+        # --- Pontuação conjunta ---
+        if agora - ultimo_ponto >= 1000:
+            vivos = (not jogador_perdeu(jogador1["vidas"])) + (not jogador_perdeu(jogador2["vidas"]))
+            if vivos > 0:
+                pontos_coop += pts_por_segundo * level
+            ultimo_ponto = agora
+
+        # --- Colisões ---
+        if not jogador_perdeu(jogador1["vidas"]):
+            meteoros = _processar_colisoes(jogador1, meteoros, particulas, sons, agora)
+            if jogador_perdeu(jogador1["vidas"]):
+                corpo1 = {"pos": jogador1["rect"].center, "morte_em": agora, "revivendo_desde": None}
+        if not jogador_perdeu(jogador2["vidas"]):
+            meteoros = _processar_colisoes(jogador2, meteoros, particulas, sons, agora)
+            if jogador_perdeu(jogador2["vidas"]):
+                corpo2 = {"pos": jogador2["rect"].center, "morte_em": agora, "revivendo_desde": None}
+
+        # --- Expirar corpos ---
+        if corpo1 and agora - corpo1["morte_em"] >= TEMPO_CORPO:
+            corpo1 = None
+        if corpo2 and agora - corpo2["morte_em"] >= TEMPO_CORPO:
+            corpo2 = None
+
+        # --- Lógica de revive ---
+        # J1 vivo pode reviver J2
+        if corpo2 and not jogador_perdeu(jogador1["vidas"]):
+            pos_c2 = pygame.Rect(corpo2["pos"][0] - 20, corpo2["pos"][1] - 20, 40, 40)
+            if _distancia(jogador1["rect"], pos_c2) <= DISTANCIA_REVIVE:
+                if corpo2["revivendo_desde"] is None:
+                    corpo2["revivendo_desde"] = agora
+                elif agora - corpo2["revivendo_desde"] >= TEMPO_REVIVE:
+                    jogador2["vidas"] = 1
+                    jogador2["rect"].center = corpo2["pos"]
+                    jogador2["invencivel_ate"] = agora + 2000
+                    corpo2 = None
+            else:
+                corpo2["revivendo_desde"] = None
+
+        # J2 vivo pode reviver J1
+        if corpo1 and not jogador_perdeu(jogador2["vidas"]):
+            pos_c1 = pygame.Rect(corpo1["pos"][0] - 20, corpo1["pos"][1] - 20, 40, 40)
+            if _distancia(jogador2["rect"], pos_c1) <= DISTANCIA_REVIVE:
+                if corpo1["revivendo_desde"] is None:
+                    corpo1["revivendo_desde"] = agora
+                elif agora - corpo1["revivendo_desde"] >= TEMPO_REVIVE:
+                    jogador1["vidas"] = 1
+                    jogador1["rect"].center = corpo1["pos"]
+                    jogador1["invencivel_ate"] = agora + 2000
+                    corpo1 = None
+            else:
+                corpo1["revivendo_desde"] = None
+
+        # --- Condição de fim ---
+        ambos_mortos = jogador_perdeu(jogador1["vidas"]) and jogador_perdeu(jogador2["vidas"])
+        sem_revive = corpo1 is None and corpo2 is None
+        if ambos_mortos and sem_revive:
+            break
+
+        # --- Desenho ---
+        if imagem_fundo:
+            tela.blit(imagem_fundo, (0, 0))
+        else:
+            tela.fill(AZUL_ESCURO)
+
+        desenhar_meteoros(tela, meteoros, imagem_meteoro)
+        _atualizar_e_desenhar_particulas(tela, particulas)
+
+        # Desenha corpos
+        for corpo, cor_corpo in ((corpo1, (100, 200, 255)), (corpo2, (255, 100, 100))):
+            if corpo:
+                cx, cy = corpo["pos"]
+                tempo_restante_corpo = TEMPO_CORPO - (agora - corpo["morte_em"])
+                pygame.draw.circle(tela, cor_corpo, (cx, cy), 18, 2)
+                # barra de tempo restante do corpo
+                proporcao = tempo_restante_corpo / TEMPO_CORPO
+                pygame.draw.rect(tela, (80, 80, 80), (cx - 20, cy - 28, 40, 5))
+                pygame.draw.rect(tela, cor_corpo, (cx - 20, cy - 28, int(40 * proporcao), 5))
+                # barra de progresso do revive
+                rev = corpo["revivendo_desde"]
+                if rev is not None:
+                    prog = min(1.0, (agora - rev) / TEMPO_REVIVE)
+                    pygame.draw.rect(tela, (80, 80, 80), (cx - 20, cy - 38, 40, 5))
+                    pygame.draw.rect(tela, (0, 255, 100), (cx - 20, cy - 38, int(40 * prog), 5))
+                    txt_rev = fonte.render("Revivendo...", True, (0, 255, 100))
+                    tela.blit(txt_rev, (cx - txt_rev.get_width() // 2, cy - 55))
+
+        if not jogador_perdeu(jogador1["vidas"]):
+            tr1 = jogador1["invencivel_ate"] - agora
+            if tr1 <= 0 or tr1 <= 1000 or (agora // 50) % 2 == 0:
+                _desenhar_jogador(tela, jogador1, imagem_nave)
+        if not jogador_perdeu(jogador2["vidas"]):
+            tr2 = jogador2["invencivel_ate"] - agora
+            if tr2 <= 0 or tr2 <= 1000 or (agora // 50) % 2 == 0:
+                _desenhar_jogador(tela, jogador2, nave2_img)
+
+        _desenhar_hud_coop(tela, fonte, pontos_coop, jogador1["vidas"], nome1, jogador2["vidas"], nome2, level, dificuldade)
+
+        if agora < nivel_msg_ate:
+            msg = fonte_grande.render(f"Level {level}!", True, AMARELO)
+            tela.blit(msg, (LARGURA_TELA // 2 - msg.get_width() // 2, ALTURA_TELA // 2 - 40))
+        pygame.display.flip()
+
+    _parar_musica()
+    _tocar(sons, "game_over")
+    nome_dupla = f"{nome1} & {nome2}"
+    atualizar_ranking_coop(nome_dupla, pontos_coop)
+
+    tela.fill((0, 0, 0))
+    tela.blit(fonte_grande.render("GAME OVER", True, VERMELHO),
+              (LARGURA_TELA // 2 - fonte_grande.size("GAME OVER")[0] // 2, ALTURA_TELA // 2 - 100))
+    tela.blit(fonte.render(f"Pontuacao da dupla: {pontos_coop}", True, BRANCO),
+              (LARGURA_TELA // 2 - 130, ALTURA_TELA // 2))
+    dica = fonte.render("R = jogar novamente   ESC = sair", True, (180, 180, 180))
+    tela.blit(dica, (LARGURA_TELA // 2 - dica.get_width() // 2, ALTURA_TELA // 2 + 60))
+    pygame.display.flip()
+    return pontos_coop
+
+
 def executar_jogo():
     """Executa o loop principal do jogo."""
     pygame.init()
@@ -573,6 +775,27 @@ def executar_jogo():
                             pygame.quit()
                             return
             continue
+
+        if modo == "Cooperativo":
+            _loop_cooperativo(
+                tela, relogio, fonte, fonte_grande, imagem_nave, imagem_meteoro,
+                imagem_fundo, sons, nome_jogador, nome_jogador2, dificuldade,
+                vel_min, vel_max, interv_inicial, interv_min, reducao, pts_por_segundo,
+            )
+            aguardando = True
+            while aguardando:
+                for evento in pygame.event.get():
+                    if evento.type == pygame.QUIT:
+                        pygame.quit()
+                        return
+                    if evento.type == pygame.KEYDOWN:
+                        if evento.key == pygame.K_r:
+                            aguardando = False
+                        if evento.key == pygame.K_ESCAPE:
+                            pygame.quit()
+                            return
+            continue
+
         jogador = _novo_jogo(imagem_nave)
         meteoros = []
         particulas = []
