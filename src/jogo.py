@@ -9,6 +9,7 @@ from src.config import (
     INTERVALO_METEORO_INICIAL, INTERVALO_METEORO_MINIMO, REDUCAO_INTERVALO,
     CAMINHO_NAVE, CAMINHO_METEORO, CAMINHO_FUNDO,
     CAMINHO_SOM_COLISAO, CAMINHO_SOM_LEVEL_UP, CAMINHO_SOM_GAME_OVER, CAMINHO_MUSICA,
+    DIFICULDADES,
 )
 from src.funcoes import limitar_valor, verificar_colisao, tomar_dano, jogador_perdeu
 from src.meteoro import criar_meteoro, mover_meteoros, desenhar_meteoros
@@ -73,6 +74,7 @@ def _tocar(sons, nome):
 def _iniciar_musica(sons):
     """Inicia trilha em loop se disponível."""
     if sons.get("musica_ok"):
+        pygame.mixer.music.set_volume(0.1)
         pygame.mixer.music.play(-1)
 
 
@@ -221,6 +223,10 @@ def _menu_pausa(tela, fonte_grande, fonte):
             txt = fonte.render(opcao, True, cor)
             tela.blit(txt, (LARGURA_TELA // 2 - txt.get_width() // 2, ALTURA_TELA // 2 - 30 + i * 50))
 
+        volume_atual = int(pygame.mixer.music.get_volume() * 100)
+        txt_vol = fonte.render(f"Musica: {volume_atual}%   [ = diminuir   ] = aumentar", True, (180, 180, 180))
+        tela.blit(txt_vol, (LARGURA_TELA // 2 - txt_vol.get_width() // 2, ALTURA_TELA - 50))
+
         pygame.display.flip()
 
         for evento in pygame.event.get():
@@ -232,6 +238,10 @@ def _menu_pausa(tela, fonte_grande, fonte):
                     selecionado = (selecionado - 1) % len(opcoes)
                 elif evento.key == pygame.K_DOWN:
                     selecionado = (selecionado + 1) % len(opcoes)
+                elif evento.key == pygame.K_LEFTBRACKET:
+                    pygame.mixer.music.set_volume(max(0.0, pygame.mixer.music.get_volume() - 0.1))
+                elif evento.key == pygame.K_RIGHTBRACKET:
+                    pygame.mixer.music.set_volume(min(1.0, pygame.mixer.music.get_volume() + 0.1))
                 elif evento.key == pygame.K_RETURN:
                     if selecionado == 1:
                         _tela_ranking(tela, fonte_grande, fonte)
@@ -267,7 +277,6 @@ def _atualizar_e_desenhar_particulas(tela, particulas):
     particulas[:] = [p for p in particulas if p["vida"] > 0]
 
 
-def _desenhar_hud(tela, fonte, pontos, vidas, recorde, global_score, level):
 def _desenhar_hud(tela, fonte, pontos, vidas, recorde, global_score, level, dificuldade):
     tela.blit(fonte.render(f"Pontos: {pontos}", True, BRANCO), (10, 10))
     tela.blit(fonte.render(f"Vidas: {vidas}", True, AMARELO), (10, 40))
@@ -331,7 +340,6 @@ def executar_jogo():
         jogador = _novo_jogo(imagem_nave)
         meteoros = []
         particulas = []
-        intervalo_meteoro = INTERVALO_METEORO_INICIAL
         intervalo_meteoro = interv_inicial
         ultimo_meteoro = pygame.time.get_ticks()
         ultimo_ponto = pygame.time.get_ticks()
@@ -420,8 +428,6 @@ def executar_jogo():
             tempo_restante = jogador["invencivel_ate"] - agora
             if tempo_restante <= 0 or tempo_restante <= 1000 or (agora // 50) % 2 == 0:
                 _desenhar_jogador(tela, jogador, imagem_nave)
-            _desenhar_hud(tela, fonte, jogador["pontos"], jogador["vidas"], recorde, melhor_pontuacao_global(), level)
-            _desenhar_jogador(tela, jogador, imagem_nave)
             _desenhar_hud(tela, fonte, jogador["pontos"], jogador["vidas"], recorde, melhor_pontuacao_global(), level, dificuldade)
             if agora < nivel_msg_ate:
                 msg = fonte_grande.render(f"Level {level}!", True, AMARELO)
