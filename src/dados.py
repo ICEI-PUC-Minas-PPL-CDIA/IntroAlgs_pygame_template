@@ -2,6 +2,7 @@ import json
 import os
 
 CAMINHO_RANKING = "data/ranking.json"
+CAMINHO_RANKING_COOP = "data/ranking_coop.json"
 
 
 def carregar_ranking():
@@ -47,3 +48,30 @@ def melhor_pontuacao_global():
     if not ranking:
         return 0
     return max(ranking.values())
+
+
+def carregar_ranking_coop():
+    """Carrega o ranking coop do JSON; retorna dict vazio se não existir."""
+    if not os.path.exists(CAMINHO_RANKING_COOP):
+        return {}
+    with open(CAMINHO_RANKING_COOP, "r", encoding="utf-8") as f:
+        try:
+            return json.load(f)
+        except json.JSONDecodeError:
+            return {}
+
+
+def atualizar_ranking_coop(nome_dupla, pontuacao):
+    """Atualiza o score da dupla se a nova pontuação for maior."""
+    ranking = carregar_ranking_coop()
+    if pontuacao > ranking.get(nome_dupla, 0):
+        ranking[nome_dupla] = pontuacao
+        with open(CAMINHO_RANKING_COOP, "w", encoding="utf-8") as f:
+            json.dump(ranking, f, ensure_ascii=False, indent=2)
+
+
+def top10_coop():
+    """Retorna lista dos 10 melhores do ranking coop [(dupla, pontuacao)]."""
+    ranking = carregar_ranking_coop()
+    ordenado = sorted(ranking.items(), key=lambda x: x[1], reverse=True)
+    return ordenado[:10]
