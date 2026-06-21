@@ -187,40 +187,6 @@ def _tela_modo(tela, fonte_grande, fonte):
                     exit()
 
 
-def _tela_modo(tela, fonte_grande, fonte):
-    opcoes = ["Solo", "Competicao", "Cooperativo"]
-    selecionado = 0
-
-    while True:
-        tela.fill((0, 0, 0))
-        titulo = fonte_grande.render("Modo de Jogo", True, AMARELO)
-        tela.blit(titulo, (LARGURA_TELA // 2 - titulo.get_width() // 2, 160))
-
-        for i, nome in enumerate(opcoes):
-            cor = AMARELO if i == selecionado else BRANCO
-            txt = fonte.render(nome, True, cor)
-            tela.blit(txt, (LARGURA_TELA // 2 - txt.get_width() // 2, 300 + i * 55))
-
-        dica = fonte.render("Setas para escolher   ENTER para confirmar", True, (180, 180, 180))
-        tela.blit(dica, (LARGURA_TELA // 2 - dica.get_width() // 2, ALTURA_TELA - 60))
-        pygame.display.flip()
-
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                pygame.quit()
-                exit()
-            if evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_UP:
-                    selecionado = (selecionado - 1) % len(opcoes)
-                elif evento.key == pygame.K_DOWN:
-                    selecionado = (selecionado + 1) % len(opcoes)
-                elif evento.key == pygame.K_RETURN:
-                    return opcoes[selecionado]
-                elif evento.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    exit()
-
-
 def _tela_login(tela, fonte_grande, fonte, numero=1):
     nome = ""
     while True:
@@ -380,10 +346,188 @@ def _desenhar_jogador(tela, jogador, imagem_nave):
         ])
 
 
-def _novo_jogo(imagem_nave):
+def _novo_jogo(imagem_nave, lado="centro"):
     w, h = TAMANHO_NAVE if imagem_nave else (40, 40)
-    rect = pygame.Rect(LARGURA_TELA // 2 - w // 2, ALTURA_TELA - h - 20, w, h)
+    if lado == "esquerda":
+        x = LARGURA_TELA // 4 - w // 2
+    elif lado == "direita":
+        x = 3 * LARGURA_TELA // 4 - w // 2
+    else:
+        x = LARGURA_TELA // 2 - w // 2
+    rect = pygame.Rect(x, ALTURA_TELA - h - 20, w, h)
     return {"rect": rect, "vidas": VIDAS_INICIAIS, "pontos": 0, "invencivel_ate": 0}
+
+
+def _desenhar_hud_vs(tela, fonte, j1, nome1, j2, nome2, level, dificuldade):
+    """HUD lado a lado para modo competição."""
+    tela.blit(fonte.render(f"{nome1}", True, (100, 200, 255)), (10, 10))
+    tela.blit(fonte.render(f"Pts: {j1['pontos']}", True, BRANCO), (10, 35))
+    tela.blit(fonte.render(f"Vidas: {j1['vidas']}", True, AMARELO), (10, 60))
+
+    txt2 = fonte.render(f"{nome2}", True, (255, 100, 100))
+    tela.blit(txt2, (LARGURA_TELA - txt2.get_width() - 10, 10))
+    txt2p = fonte.render(f"Pts: {j2['pontos']}", True, BRANCO)
+    tela.blit(txt2p, (LARGURA_TELA - txt2p.get_width() - 10, 35))
+    txt2v = fonte.render(f"Vidas: {j2['vidas']}", True, AMARELO)
+    tela.blit(txt2v, (LARGURA_TELA - txt2v.get_width() - 10, 60))
+
+    tela.blit(fonte.render(f"Level: {level}  Dif: {dificuldade}", True, (180, 180, 255)),
+              (LARGURA_TELA // 2 - 70, 10))
+
+
+def _tela_resultado_vs(tela, fonte_grande, fonte, nome1, pts1, nome2, pts2):
+    tela.fill((0, 0, 0))
+    if pts1 > pts2:
+        vencedor = f"{nome1} venceu!"
+    elif pts2 > pts1:
+        vencedor = f"{nome2} venceu!"
+    else:
+        vencedor = "Empate!"
+    tela.blit(fonte_grande.render(vencedor, True, AMARELO),
+              (LARGURA_TELA // 2 - fonte_grande.size(vencedor)[0] // 2, ALTURA_TELA // 2 - 100))
+    tela.blit(fonte.render(f"{nome1}: {pts1} pts", True, (100, 200, 255)),
+              (LARGURA_TELA // 2 - 100, ALTURA_TELA // 2))
+    tela.blit(fonte.render(f"{nome2}: {pts2} pts", True, (255, 100, 100)),
+              (LARGURA_TELA // 2 - 100, ALTURA_TELA // 2 + 35))
+    dica = fonte.render("R = jogar novamente   ESC = sair", True, (180, 180, 180))
+    tela.blit(dica, (LARGURA_TELA // 2 - dica.get_width() // 2, ALTURA_TELA // 2 + 100))
+    pygame.display.flip()
+
+
+def _processar_colisoes(jogador, meteoros, particulas, sons, agora):
+    """Verifica colisões para um jogador, retorna lista de meteoros atualizada."""
+    if agora > jogador["invencivel_ate"]:
+        for m in meteoros:
+            if verificar_colisao(jogador["rect"], m["rect"]):
+                jogador["vidas"] = tomar_dano(jogador["vidas"], 1)
+                jogador["invencivel_ate"] = agora + 2000
+                meteoros.remove(m)
+                _criar_explosao(particulas, m["rect"].center)
+                _tocar(sons, "colisao")
+                break
+    return meteoros
+
+
+def _loop_competicao(tela, relogio, fonte, fonte_grande, imagem_nave, imagem_meteoro,
+                     imagem_fundo, sons, nome1, nome2, dificuldade,
+                     vel_min, vel_max, interv_inicial, interv_min, reducao, pts_por_segundo):
+    jogador1 = _novo_jogo(imagem_nave, "esquerda")
+    jogador2 = _novo_jogo(imagem_nave, "direita")
+    nave2_img = pygame.transform.flip(imagem_nave, False, True) if imagem_nave else None
+
+    meteoros, particulas = [], []
+    intervalo_meteoro = interv_inicial
+    ultimo_meteoro = ultimo_ponto = ultima_reducao = pygame.time.get_ticks()
+    level, nivel_msg_ate = 1, 0
+    _iniciar_musica(sons)
+
+    while True:
+        relogio.tick(FPS)
+        agora = pygame.time.get_ticks()
+
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
+                if sons.get("musica_ok"):
+                    pygame.mixer.music.pause()
+                resultado = _menu_pausa(tela, fonte_grande, fonte)
+                if sons.get("musica_ok"):
+                    if resultado == 2:
+                        _parar_musica()
+                    else:
+                        pygame.mixer.music.unpause()
+                if resultado == 2:
+                    pygame.quit()
+                    exit()
+
+        teclas = pygame.key.get_pressed()
+        # Jogador 1 — WASD
+        if not jogador_perdeu(jogador1["vidas"]):
+            if teclas[pygame.K_a]:
+                jogador1["rect"].x -= VELOCIDADE_JOGADOR
+            if teclas[pygame.K_d]:
+                jogador1["rect"].x += VELOCIDADE_JOGADOR
+            if teclas[pygame.K_w]:
+                jogador1["rect"].y -= VELOCIDADE_JOGADOR
+            if teclas[pygame.K_s]:
+                jogador1["rect"].y += VELOCIDADE_JOGADOR
+            jogador1["rect"].x = limitar_valor(jogador1["rect"].x, 0, LARGURA_TELA - jogador1["rect"].width)
+            jogador1["rect"].y = limitar_valor(jogador1["rect"].y, 0, ALTURA_TELA - jogador1["rect"].height)
+
+        # Jogador 2 — setas
+        if not jogador_perdeu(jogador2["vidas"]):
+            if teclas[pygame.K_LEFT]:
+                jogador2["rect"].x -= VELOCIDADE_JOGADOR_2
+            if teclas[pygame.K_RIGHT]:
+                jogador2["rect"].x += VELOCIDADE_JOGADOR_2
+            if teclas[pygame.K_UP]:
+                jogador2["rect"].y -= VELOCIDADE_JOGADOR_2
+            if teclas[pygame.K_DOWN]:
+                jogador2["rect"].y += VELOCIDADE_JOGADOR_2
+            jogador2["rect"].x = limitar_valor(jogador2["rect"].x, 0, LARGURA_TELA - jogador2["rect"].width)
+            jogador2["rect"].y = limitar_valor(jogador2["rect"].y, 0, ALTURA_TELA - jogador2["rect"].height)
+
+        if agora - ultimo_meteoro >= intervalo_meteoro and agora >= nivel_msg_ate:
+            meteoros.append(criar_meteoro(level, vel_min, vel_max))
+            ultimo_meteoro = agora
+
+        if agora - ultima_reducao >= 15000:
+            intervalo_meteoro = max(interv_min, intervalo_meteoro - reducao)
+            ultima_reducao = agora
+            level += 1
+            nivel_msg_ate = agora + 2000
+            _tocar(sons, "level_up")
+
+        if agora >= nivel_msg_ate:
+            meteoros = mover_meteoros(meteoros)
+
+        if agora - ultimo_ponto >= 1000:
+            if not jogador_perdeu(jogador1["vidas"]):
+                jogador1["pontos"] += pts_por_segundo * level
+            if not jogador_perdeu(jogador2["vidas"]):
+                jogador2["pontos"] += pts_por_segundo * level
+            ultimo_ponto = agora
+
+        if not jogador_perdeu(jogador1["vidas"]):
+            meteoros = _processar_colisoes(jogador1, meteoros, particulas, sons, agora)
+        if not jogador_perdeu(jogador2["vidas"]):
+            meteoros = _processar_colisoes(jogador2, meteoros, particulas, sons, agora)
+
+        if jogador_perdeu(jogador1["vidas"]) and jogador_perdeu(jogador2["vidas"]):
+            break
+
+        if imagem_fundo:
+            tela.blit(imagem_fundo, (0, 0))
+        else:
+            tela.fill(AZUL_ESCURO)
+
+        desenhar_meteoros(tela, meteoros, imagem_meteoro)
+        _atualizar_e_desenhar_particulas(tela, particulas)
+
+        if not jogador_perdeu(jogador1["vidas"]):
+            tr1 = jogador1["invencivel_ate"] - agora
+            if tr1 <= 0 or tr1 <= 1000 or (agora // 50) % 2 == 0:
+                _desenhar_jogador(tela, jogador1, imagem_nave)
+        if not jogador_perdeu(jogador2["vidas"]):
+            tr2 = jogador2["invencivel_ate"] - agora
+            if tr2 <= 0 or tr2 <= 1000 or (agora // 50) % 2 == 0:
+                _desenhar_jogador(tela, jogador2, nave2_img)
+
+        _desenhar_hud_vs(tela, fonte, jogador1, nome1, jogador2, nome2, level, dificuldade)
+
+        if agora < nivel_msg_ate:
+            msg = fonte_grande.render(f"Level {level}!", True, AMARELO)
+            tela.blit(msg, (LARGURA_TELA // 2 - msg.get_width() // 2, ALTURA_TELA // 2 - 40))
+        pygame.display.flip()
+
+    _parar_musica()
+    _tocar(sons, "game_over")
+    atualizar_ranking(nome1, jogador1["pontos"])
+    atualizar_ranking(nome2, jogador2["pontos"])
+    _tela_resultado_vs(tela, fonte_grande, fonte, nome1, jogador1["pontos"], nome2, jogador2["pontos"])
+    return jogador1["pontos"], jogador2["pontos"]
 
 
 def executar_jogo():
@@ -410,6 +554,25 @@ def executar_jogo():
 
     jogando = True
     while jogando:
+        if modo == "Competicao":
+            _loop_competicao(
+                tela, relogio, fonte, fonte_grande, imagem_nave, imagem_meteoro,
+                imagem_fundo, sons, nome_jogador, nome_jogador2, dificuldade,
+                vel_min, vel_max, interv_inicial, interv_min, reducao, pts_por_segundo,
+            )
+            aguardando = True
+            while aguardando:
+                for evento in pygame.event.get():
+                    if evento.type == pygame.QUIT:
+                        pygame.quit()
+                        return
+                    if evento.type == pygame.KEYDOWN:
+                        if evento.key == pygame.K_r:
+                            aguardando = False
+                        if evento.key == pygame.K_ESCAPE:
+                            pygame.quit()
+                            return
+            continue
         jogador = _novo_jogo(imagem_nave)
         meteoros = []
         particulas = []
