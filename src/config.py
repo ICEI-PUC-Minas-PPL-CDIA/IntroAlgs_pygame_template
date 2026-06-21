@@ -3,11 +3,49 @@ LARGURA_TELA = 800
 ALTURA_TELA = 600
 FPS = 60
 
-TITULO_JOGO = "Projeto Final - Pygame"
+TITULO_JOGO = "SpaceNinja"
 
 BRANCO = (255, 255, 255)
 PRETO = (0, 0, 0)
-CINZA = (212,212,212)
+CINZA = (212, 212, 212)
+AZUL_ESCURO = (5, 5, 30)
+VERMELHO = (220, 50, 50)
+AMARELO = (255, 220, 50)
+
+# Jogador
+VELOCIDADE_JOGADOR = 5
+VIDAS_INICIAIS = 3
+
+# Meteoros (padrão Médio)
+VELOCIDADE_METEORO_MIN = 3
+VELOCIDADE_METEORO_MAX = 6
+INTERVALO_METEORO_INICIAL = 1500  # milissegundos
+INTERVALO_METEORO_MINIMO = 400
+REDUCAO_INTERVALO = 150           # reduz a cada 15 s de jogo
+
+# Pontuação: 1 ponto por segundo sobrevivido
+PONTOS_POR_SEGUNDO = 1
+
+# Dificuldades: (vel_min, vel_max, intervalo_inicial, intervalo_minimo, reducao, pontos_por_segundo)
+DIFICULDADES = {
+    "Facil":      (2, 4, 2200, 700, 100, 1),
+    "Medio":      (3, 6, 1500, 400, 150, 2),
+    "Dificil":    (4, 8, 1000, 300, 200, 4),
+    "Impossivel": (6, 12, 600, 200, 250, 7),
+}
 
 CAMINHO_RECORDE = "data/recorde.txt"
-CAMINHO_SPRITES = "assets/imagens/spritesheet.bmp"
+CAMINHO_NAVE = "assets/imagens/nave.png"
+CAMINHO_METEORO = "assets/imagens/meteoro.png"
+CAMINHO_FUNDO = "assets/imagens/fundo.png"
+
+# Multiplayer
+VELOCIDADE_JOGADOR_2 = 5
+DISTANCIA_REVIVE = 80       # pixels de proximidade para reviver
+TEMPO_REVIVE = 3000         # ms segurando próximo para reviver (3s)
+TEMPO_CORPO = 10000         # ms que o corpo permanece no mapa (10s)
+
+CAMINHO_SOM_COLISAO = "assets/sons/colisao.ogg"
+CAMINHO_SOM_LEVEL_UP = "assets/sons/level_up.ogg"
+CAMINHO_SOM_GAME_OVER = "assets/sons/game_over.ogg"
+CAMINHO_MUSICA = "assets/sons/musica.ogg"
