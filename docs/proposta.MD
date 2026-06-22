@@ -15,6 +15,8 @@ Liste os integrantes do grupo.
 - Nome 1: Henrique Santos de Souza
 - Nome 2: Guilherme Henrique
 - Nome 3: Bruno Coutinho
+- Nome 4: Kelvin Mendes
+- Nome 5: Leticia Lacerda
 
 ## 3. Tipo de jogo
 
