@@ -5,7 +5,7 @@ from src.config import (
     ALTURA_TELA,
     FPS,
     TITULO_JOGO,
-    CINZA,
+    WALLPAPER,
     CAMINHO_RECORDE,
     CAMINHO_SPRITES,
 )
@@ -39,7 +39,7 @@ def executar_jogo():
 
 
     # Jogador: usando tamanho 110x110 para capturar o quadrado perfeitamente
-    player_image = pegar_sprite(CAMINHO_SPRITES, x=110, y=120, width=190, height=190, scale=0.5)
+    player_image = pegar_sprite("assets/imagens/millenium_falcon_fr.bmp", x=0, y=0, width=118, height=32, scale=1)
 
     # Gema pequena: usando tamanho 64x64
     gem_image    = pegar_sprite(CAMINHO_SPRITES, x=900, y=690, width=200, height=200, scale=0.5)
@@ -63,10 +63,16 @@ def executar_jogo():
         "rect": bat_image.get_rect(topleft=(200, 500))
     }
 
-    velocidade = 5
+    velocidade = 10
     pontos = 0
     vidas = 3
     recorde = carregar_recorde(CAMINHO_RECORDE)
+
+    imagem_original = pygame.image.load("assets/imagens/starsky.jpg").convert()
+
+    imagem_original = pygame.transform.scale(imagem_original, (800, 600))
+
+    
 
     # Loop principal: processa entrada, atualiza estado e renderiza a cena.
     while rodando:
@@ -74,6 +80,8 @@ def executar_jogo():
 
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
+                rodando = False
+            if evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
                 rodando = False
 
         teclas = pygame.key.get_pressed()
@@ -127,16 +135,15 @@ def executar_jogo():
             recorde = pontos
             salvar_recorde(CAMINHO_RECORDE, recorde)
 
-        pygame.display.set_caption(
-            f"{TITULO_JOGO} | Pontos: {pontos} | Recorde: {recorde} | Vidas: {vidas}"
-        )
+        tela.blit(imagem_original, (0, 0))
 
-        tela.fill(CINZA)
-
-        # Desenhando os elementos na tela passando a imagem e o rect de cada dicionário
         tela.blit(gema["imagem"], gema["rect"])
         tela.blit(inimigo["imagem"], inimigo["rect"])
         tela.blit(jogador["imagem"], jogador["rect"])
+
+        pygame.display.set_caption(
+            f"{TITULO_JOGO} | Pontos: {pontos} | Recorde: {recorde} | Vidas: {vidas}"
+        )
 
         pygame.display.flip()
 
