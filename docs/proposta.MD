@@ -1,95 +1,63 @@
 # Proposta Inicial do Jogo
 
-Este documento deve ser preenchido pelo grupo na Semana 1 do projeto.
+Este documento deve ser preenchido pelo grupo na etapa inicial do projeto.
 
-A proposta deve apresentar uma ideia simples, clara e viável para ser desenvolvida com Python e Pygame dentro do prazo disponível.
+A proposta deve apresentar uma ideia simples, clara e viável para ser desenvolvida com **Python e Pygame** dentro do prazo disponível. Consulte o enunciado publicado no Canvas para conhecer o eixo temático e as orientações vigentes.
 
 ## 1. Nome provisório do jogo
 
-Escreva aqui o nome provisório do jogo.
+Informe o nome provisório do jogo.
 
-Exemplo:
+**Nome:**
 
-> Corrida dos Obstáculos
+> Escreva aqui.
 
 ## 2. Integrantes do grupo
-
-Liste os integrantes do grupo.
 
 - Nome 1:
 - Nome 2:
 - Nome 3:
 - Nome 4:
 
-## 3. Tipo de jogo
+## 3. Tema escolhido
 
-Indique o tipo de jogo que será desenvolvido.
+Indique qual tema específico o grupo escolheu **dentro do eixo temático definido no enunciado**.
 
-Exemplos:
-
-- jogo de desviar de obstáculos;
-- jogo de coleta de itens;
-- labirinto simples;
-- jogo de perguntas e respostas;
-- jogo de memória;
-- Pong;
-- Snake;
-- Breakout;
-- nave desviando de meteoros;
-- corrida simples com obstáculos;
-- jogo de clique rápido;
-- jogo de sobrevivência simples.
-
-Tipo escolhido pelo grupo:
+**Tema:**
 
 > Escreva aqui.
 
-## 4. Descrição geral do jogo
-
-Explique, em poucas linhas, como o jogo funcionará.
-
-Procure responder:
-
-- O que aparece na tela?
-- O que o jogador controla?
-- O que o jogador precisa fazer?
-- Quais desafios aparecem durante a partida?
-
-Descrição:
+**Como esse tema se relaciona com o jogo?** Explique brevemente (2 a 4 linhas) como ele aparecerá nos objetivos, nas regras ou nos desafios, e não apenas nas imagens ou no cenário.
 
 > Escreva aqui.
 
-## 5. Objetivo do jogador
+## 4. Tipo de jogo
 
-Explique qual é o objetivo principal do jogador.
+Indique o estilo do jogo. Exemplos: desviar de obstáculos, coleta de itens, labirinto, perguntas e respostas, memória, Pong, Snake, Breakout, corrida ou sobrevivência simples.
 
-Exemplos:
-
-- coletar o maior número possível de itens;
-- sobreviver pelo maior tempo possível;
-- chegar até o final do labirinto;
-- acertar alvos;
-- responder perguntas corretamente;
-- evitar obstáculos;
-- quebrar todos os blocos.
-
-Objetivo:
+**Tipo escolhido:**
 
 > Escreva aqui.
 
-## 6. Regras principais
+## 5. Descrição geral do jogo
 
-Liste as principais regras do jogo.
+Explique, em poucas linhas, como o jogo funcionará. O que aparece na tela? O que o jogador controla? O que ele precisa fazer e quais desafios encontrará?
 
-Exemplo:
+**Descrição:**
 
-- O jogador começa com 3 vidas.
-- Cada moeda coletada vale 10 pontos.
-- Cada colisão com obstáculo remove 1 vida.
-- A partida termina quando as vidas chegam a zero.
-- O jogador vence se alcançar 100 pontos.
+> Escreva aqui.
 
-Regras do grupo:
+## 6. Objetivo do jogador
+
+Descreva o objetivo principal. Por exemplo: coletar itens, sobreviver por determinado tempo, chegar ao final de um percurso ou completar desafios.
+
+**Objetivo:**
+
+> Escreva aqui.
+
+## 7. Regras principais
+
+Liste até cinco regras que expliquem o funcionamento do jogo. Exemplos: o jogador começa com três vidas; acertos somam pontos; colisões retiram vidas.
 
 - Regra 1:
 - Regra 2:
@@ -97,189 +65,58 @@ Regras do grupo:
 - Regra 4:
 - Regra 5:
 
-## 7. Condição de vitória
+## 8. Condição de vitória
 
-Explique como o jogador vence ou conclui o jogo.
+Explique como o jogador vence ou conclui a partida. Exemplos: alcançar uma pontuação, finalizar uma fase ou completar todas as tarefas.
 
-Exemplos:
-
-- atingir determinada pontuação;
-- chegar ao final da fase;
-- sobreviver até o tempo acabar;
-- responder uma quantidade mínima de perguntas;
-- quebrar todos os blocos.
-
-Condição de vitória:
+**Condição de vitória:**
 
 > Escreva aqui.
 
-## 8. Condição de derrota ou encerramento
+## 9. Condição de derrota ou encerramento
 
-Explique como o jogador perde ou quando a partida termina.
+Explique quando a partida termina ou como o jogador perde. Exemplos: esgotar as vidas, acabar o tempo ou atingir o limite de erros.
 
-Exemplos:
-
-- perder todas as vidas;
-- acabar o tempo;
-- colidir com determinado obstáculo;
-- errar muitas perguntas;
-- deixar a bola cair, no caso de Breakout ou Pong.
-
-Condição de derrota ou encerramento:
+**Condição de derrota ou encerramento:**
 
 > Escreva aqui.
 
-## 9. Elementos previstos no jogo
+## 10. Elementos previstos no jogo
 
-Descreva os principais elementos que farão parte do jogo.
+Descreva brevemente os elementos mais importantes, sem precisar detalhar a implementação.
 
-## Jogador ou elemento principal
+- **Personagem ou elemento principal:**
+- **Obstáculos ou desafios:**
+- **Itens ou objetos de interação (se houver):**
+- **Pontuação, vidas, tempo ou progresso:**
 
-Exemplo:
+## 11. Controles previstos
 
-> Um personagem controlado pelas setas do teclado.
+Informe como o jogador vai interagir com o jogo (por exemplo, setas para movimentar, espaço para agir ou mouse para selecionar).
 
-Descrição:
-
-> Escreva aqui.
-
-## Obstáculos, inimigos ou desafios
-
-Exemplo:
-
-> Obstáculos aparecem em posições aleatórias e devem ser evitados.
-
-Descrição:
+**Controles:**
 
 > Escreva aqui.
 
-## Itens, alvos ou objetos de interação
+## 12. Principais dificuldades esperadas
 
-Exemplo:
-
-> Moedas aparecem na tela e aumentam a pontuação quando coletadas.
-
-Descrição:
-
-> Escreva aqui.
-
-## Pontuação, vidas, tempo ou progresso
-
-Exemplo:
-
-> O jogador começa com 3 vidas e ganha 10 pontos por item coletado.
-
-Descrição:
-
-> Escreva aqui.
-
-## 10. Controles previstos
-
-Informe os comandos que serão utilizados pelo jogador.
-
-Exemplo:
-
-- Seta para cima: mover para cima
-- Seta para baixo: mover para baixo
-- Seta para esquerda: mover para esquerda
-- Seta para direita: mover para direita
-- Espaço: realizar ação
-- ESC: sair do jogo
-
-Controles do grupo:
-
-- Tecla/comando:
-- Tecla/comando:
-- Tecla/comando:
-
-## 11. Organização inicial do código
-
-Explique como o grupo pretende organizar o código.
-
-Exemplo:
-
-- `main.py`: inicia o jogo;
-- `src/jogo.py`: contém o loop principal;
-- `src/config.py`: guarda configurações como tamanho da tela e cores;
-- `src/funcoes.py`: contém funções auxiliares;
-- `src/dados.py`: contém funções de leitura e escrita de arquivos.
-
-Organização planejada:
-
-> Escreva aqui.
-
-
-## 12. Recursos externos previstos
-
-Informe se o grupo pretende utilizar imagens, sons, fontes, tutoriais ou códigos externos.
-
-Exemplo:
-
-- imagens obtidas de banco gratuito;
-- sons gratuitos;
-- tutorial usado apenas como referência;
-- fonte personalizada.
-
-Recursos previstos:
-
-> Escreva aqui.
-
-Caso não pretenda utilizar recursos externos, escreva:
-
-> Não pretendemos utilizar recursos externos.
-
-## 13. Principais dificuldades esperadas
-
-Liste as dificuldades que o grupo acredita que poderá enfrentar.
-
-Exemplos:
-
-- movimentação do jogador;
-- colisão entre objetos;
-- controle de tempo;
-- criação do ranking;
-- organização do código;
-- uso do GitHub;
-- testes;
-- exibição de textos na tela.
-
-Dificuldades previstas:
+Cite até três dificuldades que o grupo espera enfrentar. Exemplos: movimentação, colisões, controle de tempo, testes ou uso do GitHub.
 
 - Dificuldade 1:
 - Dificuldade 2:
 - Dificuldade 3:
 
-## 14. Escopo mínimo para a entrega final
+## 13. Escopo mínimo para a entrega final
 
-Descreva qual será a versão mínima aceitável do jogo.
+Descreva a **versão mais simples que já seria jogável**, com as interações e regras essenciais. Evite planejar funcionalidades demais.
 
-Esta seção é importante para evitar que o grupo escolha uma ideia grande demais.
-
-Exemplo:
-
-> A versão mínima do jogo terá um personagem controlado pelo teclado, obstáculos aparecendo na tela, sistema de vidas, sistema de pontuação e tela de fim de jogo.
-
-Escopo mínimo:
+**Escopo mínimo:**
 
 > Escreva aqui.
 
-## 15. Possíveis melhorias, caso haja tempo
+## 14. Possíveis melhorias, caso haja tempo
 
-Liste funcionalidades extras que o grupo poderá implementar se conseguir concluir o escopo mínimo.
-
-Exemplos:
-
-- tela inicial;
-- sons;
-- fases;
-- aumento de dificuldade;
-- ranking;
-- animações;
-- novos tipos de obstáculos;
-- diferentes personagens;
-- menu de pausa.
-
-Melhorias possíveis:
+Liste até três funcionalidades extras para implementar somente depois que a versão mínima estiver funcionando. Exemplos: sons, fases, ranking, animações ou menu inicial.
 
 - Melhoria 1:
 - Melhoria 2:
