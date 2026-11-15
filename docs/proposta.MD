@@ -4,120 +4,76 @@ Este documento deve ser preenchido pelo grupo na etapa inicial do projeto.
 
 A proposta deve apresentar uma ideia simples, clara e viável para ser desenvolvida com **Python e Pygame** dentro do prazo disponível. Consulte o enunciado publicado no Canvas para conhecer o eixo temático e as orientações vigentes.
 
-## 1. Nome provisório do jogo
+# 1. Nome provisório do jogo
+Nome: Guerra das Máquinas
 
-Informe o nome provisório do jogo.
+# 2. Integrantes do grupo
 
-**Nome:**
+Nome 1: Luanna Rodrigues Campos
 
-> Escreva aqui.
+Nome 2: Manuela Terto Boaventura
 
-## 2. Integrantes do grupo
+Nome 3: Kennedy Pereira Mendes Lima
 
-- Nome 1:
-- Nome 2:
-- Nome 3:
-- Nome 4:
+Nome 4: Davi Alves Franco Gomes
 
-## 3. Tema escolhido
+# 3. Tema escolhido
+Tema: Mundo Pós-Apocalíptico e Rebelião das Máquinas (Inteligência Artificial hostil).
 
-Indique qual tema específico o grupo escolheu **dentro do eixo temático definido no enunciado**.
+Como esse tema se relaciona com o jogo? O tema define diretamente os obstáculos e a progressão da partida: o jogador enfrenta ondas de robôs autônomos coordenados por uma IA central que tomou o planeta. Para avançar pelo território devastado e sobreviver, é preciso gerenciar disparos e eliminar os sentinelas mecânicos que bloqueiam o caminho até o núcleo de controle.
 
-**Tema:**
+#4. Tipo de jogo
+Tipo escolhido: Jogo de tiro e progressão lateral (Run and Gun / Side-Scroller Shooter 2D).
 
-> Escreva aqui.
+#5. Descrição geral do jogo
+Descrição: Na tela, aparece um cenário urbano em ruínas visto de lado, com deslocamento horizontal da esquerda para a direita. O jogador controla um sobrevivente armado que precisa caminhar para frente enquanto robôs controlados pela IA surgem pelo caminho tentando interceptá-lo. O desafio consiste em desviar das investidas ou disparos inimigos e atirar nos robôs para abrir passagem e acumular pontos.
 
-**Como esse tema se relaciona com o jogo?** Explique brevemente (2 a 4 linhas) como ele aparecerá nos objetivos, nas regras ou nos desafios, e não apenas nas imagens ou no cenário.
+#6. Objetivo do jogador
+Objetivo: Avançar pelo percurso pós-apocalíptico destruindo os robôs inimigos até alcançar o final da fase (ou atingir a pontuação necessária) sem perder todas as vidas.
 
-> Escreva aqui.
+#7. Regras principais
+Regra 1: O jogador inicia a partida com 3 vidas (pontos de integridade).
 
-## 4. Tipo de jogo
+Regra 2: Cada robô destruído pelos disparos do jogador soma 100 pontos ao placar.
 
-Indique o estilo do jogo. Exemplos: desviar de obstáculos, coleta de itens, labirinto, perguntas e respostas, memória, Pong, Snake, Breakout, corrida ou sobrevivência simples.
+Regra 3: Colidir diretamente com um robô ou ser atingido por um ataque inimigo retira 1 vida do jogador.
 
-**Tipo escolhido:**
+Regra 4: O jogador pode se mover para frente e para trás dentro dos limites da tela e disparar projéteis em linha reta.
 
-> Escreva aqui.
+Regra 5: Robôs possuem resistência definida (ex.: 1 a 2 tiros para serem destruídos) e desaparecem da tela ao serem derrotados.
 
-## 5. Descrição geral do jogo
+#8. Condição de vitória
+Condição de vitória: O jogador vence a partida ao percorrer toda a extensão do mapa (avançando até o ponto final da fase) e eliminar os robôs que bloqueiam o caminho, mantendo pelo menos 1 vida restante.
 
-Explique, em poucas linhas, como o jogo funcionará. O que aparece na tela? O que o jogador controla? O que ele precisa fazer e quais desafios encontrará?
+#9. Condição de derrota ou encerramento
+Condição de derrota ou encerramento: A partida termina em derrota (Game Over) imediatamente quando o contador de vidas do jogador chegar a zero.
 
-**Descrição:**
+#10. Elementos previstos no jogo
+Personagem ou elemento principal: Sobrevivente humano equipado com uma arma de energia/projéteis.
 
-> Escreva aqui.
+Obstáculos ou desafios: Robôs patrulheiros controlados pela IA que avançam em direção ao jogador (e barreiras/destroços no cenário, se aplicável).
 
-## 6. Objetivo do jogador
+Itens ou objetos de interação (se houver): Kits de reparo/vida ou recarga de munição deixados ocasionalmente ao destruir robôs.
 
-Descreva o objetivo principal. Por exemplo: coletar itens, sobreviver por determinado tempo, chegar ao final de um percurso ou completar desafios.
+Pontuação, vidas, tempo ou progresso: Contador de vidas no canto superior esquerdo, placar de pontos no canto superior direito e barra ou indicador de distância percorrida.
 
-**Objetivo:**
+#11. Controles previstos
+Controles: Teclas A / D ou Setas Esquerda / Direita para andar para trás e para frente; Barra de Espaço (ou clique esquerdo do mouse) para atirar; tecla W ou Seta para Cima caso seja implementado pulo simples para desviar.
 
-> Escreva aqui.
+#12. Principais dificuldades esperadas
+Dificuldade 1: Programar as colisões entre os tiros, os robôs e o personagem.
 
-## 7. Regras principais
+Dificuldade 2: Controlar o tempo de surgimento dos robôs e o aumento gradual da dificuldade na partida.
 
-Liste até cinco regras que expliquem o funcionamento do jogo. Exemplos: o jogador começa com três vidas; acertos somam pontos; colisões retiram vidas.
+Dificuldade 3: Organizar e juntar o código do grupo usando o GitHub.
 
-- Regra 1:
-- Regra 2:
-- Regra 3:
-- Regra 4:
-- Regra 5:
+#13. Escopo mínimo para a entrega final
+Escopo mínimo: Uma tela jogável funcional contendo o personagem que anda para frente/trás e atira, um tipo básico de robô inimigo surgindo pela direita, detecção de colisão (tiro destrói robô; robô tira vida do jogador), contagem funcional de vidas e pontos, além de telas simples de Vitória e Game Over.
 
-## 8. Condição de vitória
+#14. Possíveis melhorias, caso haja tempo
+Melhoria 1: Adicionar efeitos sonoros de tiros, explosões de robôs e trilha sonora de fundo pós-apocalíptica.
 
-Explique como o jogador vence ou conclui a partida. Exemplos: alcançar uma pontuação, finalizar uma fase ou completar todas as tarefas.
+Melhoria 2: Incluir um segundo tipo de robô mais resistente (ou um chefe robótico da IA no final do percurso).
 
-**Condição de vitória:**
+Melhoria 3: Criar um menu inicial com instruções de controles e um sistema de ranking de maior pontuação (High Score).
 
-> Escreva aqui.
-
-## 9. Condição de derrota ou encerramento
-
-Explique quando a partida termina ou como o jogador perde. Exemplos: esgotar as vidas, acabar o tempo ou atingir o limite de erros.
-
-**Condição de derrota ou encerramento:**
-
-> Escreva aqui.
-
-## 10. Elementos previstos no jogo
-
-Descreva brevemente os elementos mais importantes, sem precisar detalhar a implementação.
-
-- **Personagem ou elemento principal:**
-- **Obstáculos ou desafios:**
-- **Itens ou objetos de interação (se houver):**
-- **Pontuação, vidas, tempo ou progresso:**
-
-## 11. Controles previstos
-
-Informe como o jogador vai interagir com o jogo (por exemplo, setas para movimentar, espaço para agir ou mouse para selecionar).
-
-**Controles:**
-
-> Escreva aqui.
-
-## 12. Principais dificuldades esperadas
-
-Cite até três dificuldades que o grupo espera enfrentar. Exemplos: movimentação, colisões, controle de tempo, testes ou uso do GitHub.
-
-- Dificuldade 1:
-- Dificuldade 2:
-- Dificuldade 3:
-
-## 13. Escopo mínimo para a entrega final
-
-Descreva a **versão mais simples que já seria jogável**, com as interações e regras essenciais. Evite planejar funcionalidades demais.
-
-**Escopo mínimo:**
-
-> Escreva aqui.
-
-## 14. Possíveis melhorias, caso haja tempo
-
-Liste até três funcionalidades extras para implementar somente depois que a versão mínima estiver funcionando. Exemplos: sons, fases, ranking, animações ou menu inicial.
-
-- Melhoria 1:
-- Melhoria 2:
-- Melhoria 3:
