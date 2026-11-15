@@ -8,7 +8,7 @@
 
 ## 2. Integrantes do grupo
 
-- Nome 1: Patrick
+- Nome 1: Patrick Augusto de Oliveira
 - Nome 2: (preencher)
 - Nome 3: (preencher)
 - Nome 4: (preencher)
